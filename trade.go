@@ -3,7 +3,7 @@ package payment_center_sdk
 import (
 	"fmt"
 	"github.com/google/uuid"
-	"payment-center-sdk/proto"
+	"github.com/damon-dai/payment-center-sdk/proto"
 )
 
 type Trade struct {
