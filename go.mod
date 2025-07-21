@@ -1,4 +1,4 @@
-module payment-center-sdk
+module github.com/damon-dai/payment-center-sdk
 
 go 1.23.1
 
