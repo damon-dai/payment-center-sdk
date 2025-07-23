@@ -2,7 +2,12 @@ package payment_center_sdk
 
 import (
 	"context"
+	"fmt"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/keepalive"
 	"log"
+	"time"
 
 	"github.com/shimingyah/pool"
 	"google.golang.org/grpc/metadata"
@@ -31,8 +36,25 @@ func GetConnect(addr string) (pool.Conn, error) {
 	return conn, err
 }
 
-func GetMetadataCtx(traceId, source, token string, kv ...string) context.Context {
-	wkv := []string{"trace_id", traceId, "project_source", source, "token", token}
+func NewGrpcClient(addr string) (*grpc.ClientConn, error) {
+	fmt.Println("服务端地址addr: ", addr)
+	conn, err := grpc.NewClient(addr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithKeepaliveParams(keepalive.ClientParameters{
+			Time:                30 * time.Second, // 心跳间隔
+			Timeout:             10 * time.Second, // 心跳超时
+			PermitWithoutStream: true,             // 即使没有活跃流也发送心跳
+		}),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return conn, nil
+}
+
+func GetMetadataCtx(traceId, bizCode, token string, kv ...string) context.Context {
+	wkv := []string{"trace_id", traceId, "biz_code", bizCode, "token", token}
 	if len(kv) > 0 {
 		wkv = append(wkv, kv...)
 	}

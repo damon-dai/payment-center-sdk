@@ -4,7 +4,7 @@
 // - protoc             v3.21.12
 // source: chess_trade.proto
 
-package proto
+package trade
 
 import (
 	context "context"
@@ -19,30 +19,31 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Trade_H5Prepaid_FullMethodName                  = "/proto.Trade/h5Prepaid"
-	Trade_AppPrepaid_FullMethodName                 = "/proto.Trade/AppPrepaid"
-	Trade_JsapiPrepaid_FullMethodName               = "/proto.Trade/jsapiPrepaid"
-	Trade_QueryOrder_FullMethodName                 = "/proto.Trade/queryOrder"
-	Trade_CancelOrder_FullMethodName                = "/proto.Trade/cancelOrder"
-	Trade_RefundOrder_FullMethodName                = "/proto.Trade/refundOrder"
-	Trade_WithdrawBankCard_FullMethodName           = "/proto.Trade/withdrawBankCard"
-	Trade_QueryExtractOrder_FullMethodName          = "/proto.Trade/queryExtractOrder"
-	Trade_SaveExtractConfig_FullMethodName          = "/proto.Trade/saveExtractConfig"
-	Trade_GetExtractConfig_FullMethodName           = "/proto.Trade/getExtractConfig"
-	Trade_SaveExtractUserConfig_FullMethodName      = "/proto.Trade/saveExtractUserConfig"
-	Trade_GetExtractUserConfig_FullMethodName       = "/proto.Trade/getExtractUserConfig"
-	Trade_GetExtractLogs_FullMethodName             = "/proto.Trade/getExtractLogs"
-	Trade_CheckUserExtractRisk_FullMethodName       = "/proto.Trade/checkUserExtractRisk"
-	Trade_HnapayNewSelfAccount_FullMethodName       = "/proto.Trade/hnapayNewSelfAccount"
-	Trade_HnapayBindBankCard_FullMethodName         = "/proto.Trade/hnapayBindBankCard"
-	Trade_HnapayBindBankCardConfirm_FullMethodName  = "/proto.Trade/hnapayBindBankCardConfirm"
-	Trade_HnapayUnbindBankCard_FullMethodName       = "/proto.Trade/hnapayUnbindBankCard"
-	Trade_HnapayQuickPayOrder_FullMethodName        = "/proto.Trade/hnapayQuickPayOrder"
-	Trade_HnapayQuickPayConfirm_FullMethodName      = "/proto.Trade/hnapayQuickPayConfirm"
-	Trade_HnapayTransfer_FullMethodName             = "/proto.Trade/hnapayTransfer"
-	Trade_HnapayWithdraw_FullMethodName             = "/proto.Trade/hnapayWithdraw"
-	Trade_HnapayCheckUserAccountInfo_FullMethodName = "/proto.Trade/hnapayCheckUserAccountInfo"
-	Trade_GetNcountAccountInfo_FullMethodName       = "/proto.Trade/getNcountAccountInfo"
+	Trade_H5Prepaid_FullMethodName                  = "/new_chess.Trade/h5Prepaid"
+	Trade_AppPrepaid_FullMethodName                 = "/new_chess.Trade/AppPrepaid"
+	Trade_JsapiPrepaid_FullMethodName               = "/new_chess.Trade/jsapiPrepaid"
+	Trade_QueryOrder_FullMethodName                 = "/new_chess.Trade/queryOrder"
+	Trade_CancelOrder_FullMethodName                = "/new_chess.Trade/cancelOrder"
+	Trade_RefundOrder_FullMethodName                = "/new_chess.Trade/refundOrder"
+	Trade_WithdrawBankCard_FullMethodName           = "/new_chess.Trade/withdrawBankCard"
+	Trade_QueryExtractOrder_FullMethodName          = "/new_chess.Trade/queryExtractOrder"
+	Trade_SaveExtractConfig_FullMethodName          = "/new_chess.Trade/saveExtractConfig"
+	Trade_GetExtractConfig_FullMethodName           = "/new_chess.Trade/getExtractConfig"
+	Trade_SaveExtractUserConfig_FullMethodName      = "/new_chess.Trade/saveExtractUserConfig"
+	Trade_GetExtractUserConfig_FullMethodName       = "/new_chess.Trade/getExtractUserConfig"
+	Trade_GetExtractLogs_FullMethodName             = "/new_chess.Trade/getExtractLogs"
+	Trade_CheckUserExtractRisk_FullMethodName       = "/new_chess.Trade/checkUserExtractRisk"
+	Trade_HnapayNewSelfAccount_FullMethodName       = "/new_chess.Trade/hnapayNewSelfAccount"
+	Trade_HnapayBindBankCard_FullMethodName         = "/new_chess.Trade/hnapayBindBankCard"
+	Trade_HnapayBindBankCardConfirm_FullMethodName  = "/new_chess.Trade/hnapayBindBankCardConfirm"
+	Trade_HnapayUnbindBankCard_FullMethodName       = "/new_chess.Trade/hnapayUnbindBankCard"
+	Trade_HnapayQuickPayOrder_FullMethodName        = "/new_chess.Trade/hnapayQuickPayOrder"
+	Trade_HnapayQuickPayConfirm_FullMethodName      = "/new_chess.Trade/hnapayQuickPayConfirm"
+	Trade_HnapayTransfer_FullMethodName             = "/new_chess.Trade/hnapayTransfer"
+	Trade_HnapayWithdraw_FullMethodName             = "/new_chess.Trade/hnapayWithdraw"
+	Trade_HnapayCheckUserAccountInfo_FullMethodName = "/new_chess.Trade/hnapayCheckUserAccountInfo"
+	Trade_GetNcountAccountInfo_FullMethodName       = "/new_chess.Trade/getNcountAccountInfo"
+	Trade_SetPaymentSecret_FullMethodName           = "/new_chess.Trade/setPaymentSecret"
 )
 
 // TradeClient is the client API for Trade service.
@@ -97,6 +98,8 @@ type TradeClient interface {
 	HnapayCheckUserAccountInfo(ctx context.Context, in *HnapayCheckUserAccountInfoReq, opts ...grpc.CallOption) (*HnapayCheckUserAccountInfoResp, error)
 	// 获取系统账户信息
 	GetNcountAccountInfo(ctx context.Context, in *GetNcountAccountInfoReq, opts ...grpc.CallOption) (*GetNcountAccountInfoResp, error)
+	// 设置支付密码
+	SetPaymentSecret(ctx context.Context, in *SetPaymentSecretReq, opts ...grpc.CallOption) (*SetPaymentSecretResp, error)
 }
 
 type tradeClient struct {
@@ -347,6 +350,16 @@ func (c *tradeClient) GetNcountAccountInfo(ctx context.Context, in *GetNcountAcc
 	return out, nil
 }
 
+func (c *tradeClient) SetPaymentSecret(ctx context.Context, in *SetPaymentSecretReq, opts ...grpc.CallOption) (*SetPaymentSecretResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetPaymentSecretResp)
+	err := c.cc.Invoke(ctx, Trade_SetPaymentSecret_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TradeServer is the server API for Trade service.
 // All implementations must embed UnimplementedTradeServer
 // for forward compatibility.
@@ -399,6 +412,8 @@ type TradeServer interface {
 	HnapayCheckUserAccountInfo(context.Context, *HnapayCheckUserAccountInfoReq) (*HnapayCheckUserAccountInfoResp, error)
 	// 获取系统账户信息
 	GetNcountAccountInfo(context.Context, *GetNcountAccountInfoReq) (*GetNcountAccountInfoResp, error)
+	// 设置支付密码
+	SetPaymentSecret(context.Context, *SetPaymentSecretReq) (*SetPaymentSecretResp, error)
 	mustEmbedUnimplementedTradeServer()
 }
 
@@ -480,6 +495,9 @@ func (UnimplementedTradeServer) HnapayCheckUserAccountInfo(context.Context, *Hna
 }
 func (UnimplementedTradeServer) GetNcountAccountInfo(context.Context, *GetNcountAccountInfoReq) (*GetNcountAccountInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetNcountAccountInfo not implemented")
+}
+func (UnimplementedTradeServer) SetPaymentSecret(context.Context, *SetPaymentSecretReq) (*SetPaymentSecretResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetPaymentSecret not implemented")
 }
 func (UnimplementedTradeServer) mustEmbedUnimplementedTradeServer() {}
 func (UnimplementedTradeServer) testEmbeddedByValue()               {}
@@ -934,11 +952,29 @@ func _Trade_GetNcountAccountInfo_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Trade_SetPaymentSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetPaymentSecretReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TradeServer).SetPaymentSecret(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Trade_SetPaymentSecret_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TradeServer).SetPaymentSecret(ctx, req.(*SetPaymentSecretReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Trade_ServiceDesc is the grpc.ServiceDesc for Trade service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Trade_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.Trade",
+	ServiceName: "new_chess.Trade",
 	HandlerType: (*TradeServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -1036,6 +1072,10 @@ var Trade_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "getNcountAccountInfo",
 			Handler:    _Trade_GetNcountAccountInfo_Handler,
+		},
+		{
+			MethodName: "setPaymentSecret",
+			Handler:    _Trade_SetPaymentSecret_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
