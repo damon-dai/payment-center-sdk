@@ -2,7 +2,6 @@ package payment_center_sdk
 
 import (
 	"context"
-	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/keepalive"
@@ -37,7 +36,6 @@ func GetConnect(addr string) (pool.Conn, error) {
 }
 
 func NewGrpcClient(addr string) (*grpc.ClientConn, error) {
-	fmt.Println("服务端地址addr: ", addr)
 	conn, err := grpc.NewClient(addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{
