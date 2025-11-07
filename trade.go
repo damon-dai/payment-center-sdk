@@ -26,8 +26,8 @@ func Init(url, bizCode, requestId string) Trade {
 	}
 }
 
-// HnapayNewSelfAccount 新生个人开户
-func (t *Trade) HnapayNewSelfAccount(request *trade.HnapayNewSelfAccountReq) (*trade.HnapayNewSelfAccountResp, error) {
+// MallBookNewSelfAccount 个人开户
+func (t *Trade) MallBookNewSelfAccount(request *trade.MallBookNewSelfAccountReq) (*trade.MallBookNewSelfAccountResp, error) {
 	conn, err := NewGrpcClient(t.Url)
 	if err != nil {
 		return nil, err
@@ -35,11 +35,11 @@ func (t *Trade) HnapayNewSelfAccount(request *trade.HnapayNewSelfAccountReq) (*t
 
 	client := trade.NewTradeClient(conn)
 	ctx := GetMetadataCtx(t.RequestId, t.BizCode, t.Token)
-	return client.HnapayNewSelfAccount(ctx, request)
+	return client.MallBookNewSelfAccount(ctx, request)
 }
 
-// HnapayBindBankCard 新生个人用户绑卡
-func (t *Trade) HnapayBindBankCard(request *trade.HnapayBindBankCardReq) (*trade.HnapayBindBankCardResp, error) {
+// MallBookBindBankCard 个人用户绑卡
+func (t *Trade) MallBookBindBankCard(request *trade.MallBookBindBankCardReq) (*trade.MallBookBindBankCardResp, error) {
 	conn, err := NewGrpcClient(t.Url)
 	if err != nil {
 		return nil, err
@@ -47,11 +47,11 @@ func (t *Trade) HnapayBindBankCard(request *trade.HnapayBindBankCardReq) (*trade
 
 	client := trade.NewTradeClient(conn)
 	ctx := GetMetadataCtx(t.RequestId, t.BizCode, t.Token)
-	return client.HnapayBindBankCard(ctx, request)
+	return client.MallBookBindBankCard(ctx, request)
 }
 
-// HnapayBindBankCardConfirm 新生个人用户绑卡确认
-func (t *Trade) HnapayBindBankCardConfirm(request *trade.HnapayBindBankCardConfirmReq) (*trade.HnapayBindBankCardConfirmResp, error) {
+// MallBookUnbindBankCard 个人用户解绑银行卡
+func (t *Trade) MallBookUnbindBankCard(request *trade.MallBookUnbindBankCardReq) (*trade.MallBookUnbindBankCardResp, error) {
 	conn, err := NewGrpcClient(t.Url)
 	if err != nil {
 		return nil, err
@@ -59,11 +59,11 @@ func (t *Trade) HnapayBindBankCardConfirm(request *trade.HnapayBindBankCardConfi
 
 	client := trade.NewTradeClient(conn)
 	ctx := GetMetadataCtx(t.RequestId, t.BizCode, t.Token)
-	return client.HnapayBindBankCardConfirm(ctx, request)
+	return client.MallBookUnbindBankCard(ctx, request)
 }
 
-// HnapayUnbindBankCard 新生个人用户解绑银行卡
-func (t *Trade) HnapayUnbindBankCard(request *trade.HnapayUnbindBankCardReq) (*trade.HnapayUnbindBankCardResp, error) {
+// MallBookDeposit 充值
+func (t *Trade) MallBookDeposit(request *trade.MallBookDepositReq) (*trade.MallBookDepositResp, error) {
 	conn, err := NewGrpcClient(t.Url)
 	if err != nil {
 		return nil, err
@@ -71,11 +71,11 @@ func (t *Trade) HnapayUnbindBankCard(request *trade.HnapayUnbindBankCardReq) (*t
 
 	client := trade.NewTradeClient(conn)
 	ctx := GetMetadataCtx(t.RequestId, t.BizCode, t.Token)
-	return client.HnapayUnbindBankCard(ctx, request)
+	return client.MallBookDeposit(ctx, request)
 }
 
-// HnapayQuickPayOrder 新生快捷支付下单：银行卡充值
-func (t *Trade) HnapayQuickPayOrder(request *trade.HnapayQuickPayOrderReq) (*trade.HnapayQuickPayOrderResp, error) {
+// MallBookTransfer 转账
+func (t *Trade) MallBookTransfer(request *trade.MallBookTransferReq) (*trade.MallBookTransferResp, error) {
 	conn, err := NewGrpcClient(t.Url)
 	if err != nil {
 		return nil, err
@@ -83,11 +83,11 @@ func (t *Trade) HnapayQuickPayOrder(request *trade.HnapayQuickPayOrderReq) (*tra
 
 	client := trade.NewTradeClient(conn)
 	ctx := GetMetadataCtx(t.RequestId, t.BizCode, t.Token)
-	return client.HnapayQuickPayOrder(ctx, request)
+	return client.MallBookTransfer(ctx, request)
 }
 
-// HnapayQuickPayConfirm 新生快捷支付确认
-func (t *Trade) HnapayQuickPayConfirm(request *trade.HnapayQuickPayConfirmReq) (*trade.HnapayQuickPayConfirmResp, error) {
+// MallBookWithdraw 提现
+func (t *Trade) MallBookWithdraw(request *trade.MallBookWithdrawReq) (*trade.MallBookWithdrawResp, error) {
 	conn, err := NewGrpcClient(t.Url)
 	if err != nil {
 		return nil, err
@@ -95,11 +95,11 @@ func (t *Trade) HnapayQuickPayConfirm(request *trade.HnapayQuickPayConfirmReq) (
 
 	client := trade.NewTradeClient(conn)
 	ctx := GetMetadataCtx(t.RequestId, t.BizCode, t.Token)
-	return client.HnapayQuickPayConfirm(ctx, request)
+	return client.MallBookWithdraw(ctx, request)
 }
 
-// HnapayTransfer 新生转账
-func (t *Trade) HnapayTransfer(request *trade.HnapayTransferReq) (*trade.HnapayTransferResp, error) {
+// MallBookCheckUserAccountInfo 查询用户账户信息
+func (t *Trade) MallBookCheckUserAccountInfo(request *trade.MallBookCheckUserAccountInfoReq) (*trade.MallBookCheckUserAccountInfoResp, error) {
 	conn, err := NewGrpcClient(t.Url)
 	if err != nil {
 		return nil, err
@@ -107,31 +107,7 @@ func (t *Trade) HnapayTransfer(request *trade.HnapayTransferReq) (*trade.HnapayT
 
 	client := trade.NewTradeClient(conn)
 	ctx := GetMetadataCtx(t.RequestId, t.BizCode, t.Token)
-	return client.HnapayTransfer(ctx, request)
-}
-
-// HnapayWithdraw 新生提现
-func (t *Trade) HnapayWithdraw(request *trade.HnapayWithdrawReq) (*trade.HnapayWithdrawResp, error) {
-	conn, err := NewGrpcClient(t.Url)
-	if err != nil {
-		return nil, err
-	}
-
-	client := trade.NewTradeClient(conn)
-	ctx := GetMetadataCtx(t.RequestId, t.BizCode, t.Token)
-	return client.HnapayWithdraw(ctx, request)
-}
-
-// HnapayCheckUserAccountInfo 新生查询用户账户信息
-func (t *Trade) HnapayCheckUserAccountInfo(request *trade.HnapayCheckUserAccountInfoReq) (*trade.HnapayCheckUserAccountInfoResp, error) {
-	conn, err := NewGrpcClient(t.Url)
-	if err != nil {
-		return nil, err
-	}
-
-	client := trade.NewTradeClient(conn)
-	ctx := GetMetadataCtx(t.RequestId, t.BizCode, t.Token)
-	return client.HnapayCheckUserAccountInfo(ctx, request)
+	return client.MallBookCheckUserAccountInfo(ctx, request)
 }
 
 // GetNcountAccountInfo 获取系统账户信息

@@ -19,31 +19,31 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Trade_H5Prepaid_FullMethodName                  = "/new_chess.Trade/h5Prepaid"
-	Trade_AppPrepaid_FullMethodName                 = "/new_chess.Trade/AppPrepaid"
-	Trade_JsapiPrepaid_FullMethodName               = "/new_chess.Trade/jsapiPrepaid"
-	Trade_QueryOrder_FullMethodName                 = "/new_chess.Trade/queryOrder"
-	Trade_CancelOrder_FullMethodName                = "/new_chess.Trade/cancelOrder"
-	Trade_RefundOrder_FullMethodName                = "/new_chess.Trade/refundOrder"
-	Trade_WithdrawBankCard_FullMethodName           = "/new_chess.Trade/withdrawBankCard"
-	Trade_QueryExtractOrder_FullMethodName          = "/new_chess.Trade/queryExtractOrder"
-	Trade_SaveExtractConfig_FullMethodName          = "/new_chess.Trade/saveExtractConfig"
-	Trade_GetExtractConfig_FullMethodName           = "/new_chess.Trade/getExtractConfig"
-	Trade_SaveExtractUserConfig_FullMethodName      = "/new_chess.Trade/saveExtractUserConfig"
-	Trade_GetExtractUserConfig_FullMethodName       = "/new_chess.Trade/getExtractUserConfig"
-	Trade_GetExtractLogs_FullMethodName             = "/new_chess.Trade/getExtractLogs"
-	Trade_CheckUserExtractRisk_FullMethodName       = "/new_chess.Trade/checkUserExtractRisk"
-	Trade_HnapayNewSelfAccount_FullMethodName       = "/new_chess.Trade/hnapayNewSelfAccount"
-	Trade_HnapayBindBankCard_FullMethodName         = "/new_chess.Trade/hnapayBindBankCard"
-	Trade_HnapayBindBankCardConfirm_FullMethodName  = "/new_chess.Trade/hnapayBindBankCardConfirm"
-	Trade_HnapayUnbindBankCard_FullMethodName       = "/new_chess.Trade/hnapayUnbindBankCard"
-	Trade_HnapayQuickPayOrder_FullMethodName        = "/new_chess.Trade/hnapayQuickPayOrder"
-	Trade_HnapayQuickPayConfirm_FullMethodName      = "/new_chess.Trade/hnapayQuickPayConfirm"
-	Trade_HnapayTransfer_FullMethodName             = "/new_chess.Trade/hnapayTransfer"
-	Trade_HnapayWithdraw_FullMethodName             = "/new_chess.Trade/hnapayWithdraw"
-	Trade_HnapayCheckUserAccountInfo_FullMethodName = "/new_chess.Trade/hnapayCheckUserAccountInfo"
-	Trade_GetNcountAccountInfo_FullMethodName       = "/new_chess.Trade/getNcountAccountInfo"
-	Trade_SetPaymentSecret_FullMethodName           = "/new_chess.Trade/setPaymentSecret"
+	Trade_H5Prepaid_FullMethodName                    = "/new_chess.Trade/h5Prepaid"
+	Trade_AppPrepaid_FullMethodName                   = "/new_chess.Trade/AppPrepaid"
+	Trade_JsapiPrepaid_FullMethodName                 = "/new_chess.Trade/jsapiPrepaid"
+	Trade_JsapiRepaid_FullMethodName                  = "/new_chess.Trade/jsapiRepaid"
+	Trade_QueryOrder_FullMethodName                   = "/new_chess.Trade/queryOrder"
+	Trade_CancelOrder_FullMethodName                  = "/new_chess.Trade/cancelOrder"
+	Trade_RefundOrder_FullMethodName                  = "/new_chess.Trade/refundOrder"
+	Trade_WithdrawBankCard_FullMethodName             = "/new_chess.Trade/withdrawBankCard"
+	Trade_QueryExtractOrder_FullMethodName            = "/new_chess.Trade/queryExtractOrder"
+	Trade_SaveExtractConfig_FullMethodName            = "/new_chess.Trade/saveExtractConfig"
+	Trade_GetExtractConfig_FullMethodName             = "/new_chess.Trade/getExtractConfig"
+	Trade_SaveExtractUserConfig_FullMethodName        = "/new_chess.Trade/saveExtractUserConfig"
+	Trade_GetExtractUserConfig_FullMethodName         = "/new_chess.Trade/getExtractUserConfig"
+	Trade_GetExtractLogs_FullMethodName               = "/new_chess.Trade/getExtractLogs"
+	Trade_CheckUserExtractRisk_FullMethodName         = "/new_chess.Trade/checkUserExtractRisk"
+	Trade_MallBookNewSelfAccount_FullMethodName       = "/new_chess.Trade/mallBookNewSelfAccount"
+	Trade_MallBookBindBankCard_FullMethodName         = "/new_chess.Trade/mallBookBindBankCard"
+	Trade_MallBookUnbindBankCard_FullMethodName       = "/new_chess.Trade/mallBookUnbindBankCard"
+	Trade_MallBookDeposit_FullMethodName              = "/new_chess.Trade/mallBookDeposit"
+	Trade_MallBookTransfer_FullMethodName             = "/new_chess.Trade/mallBookTransfer"
+	Trade_MallBookWithdraw_FullMethodName             = "/new_chess.Trade/mallBookWithdraw"
+	Trade_MallBookCheckUserAccountInfo_FullMethodName = "/new_chess.Trade/mallBookCheckUserAccountInfo"
+	Trade_GetNcountAccountInfo_FullMethodName         = "/new_chess.Trade/getNcountAccountInfo"
+	Trade_SetPaymentSecret_FullMethodName             = "/new_chess.Trade/setPaymentSecret"
+	Trade_GetOpenIDByCode_FullMethodName              = "/new_chess.Trade/getOpenIDByCode"
 )
 
 // TradeClient is the client API for Trade service.
@@ -54,15 +54,17 @@ type TradeClient interface {
 	H5Prepaid(ctx context.Context, in *PrepaidReq, opts ...grpc.CallOption) (*H5PrepaidResp, error)
 	// app下单
 	AppPrepaid(ctx context.Context, in *PrepaidReq, opts ...grpc.CallOption) (*AppPrepaidResp, error)
-	// jsapi下单
+	// jsapi预下单
 	JsapiPrepaid(ctx context.Context, in *PrepaidReq, opts ...grpc.CallOption) (*JsapiPrepaidResp, error)
+	// jsapi预支付
+	JsapiRepaid(ctx context.Context, in *JsapiRepaidReq, opts ...grpc.CallOption) (*JsapiPrepaidResp, error)
 	// 订单查询
 	QueryOrder(ctx context.Context, in *QueryOrderReq, opts ...grpc.CallOption) (*QueryOrderResp, error)
 	// 取消订单
 	CancelOrder(ctx context.Context, in *CancelOrderReq, opts ...grpc.CallOption) (*CancelOrderResp, error)
 	// 订单退款
 	RefundOrder(ctx context.Context, in *RefundOrderReq, opts ...grpc.CallOption) (*RefundOrderResp, error)
-	// 新生账户提现至银行卡
+	// mallbook账户提现至银行卡：先转账至子商户，子商户自动结算
 	WithdrawBankCard(ctx context.Context, in *WithdrawBankCardReq, opts ...grpc.CallOption) (*WithdrawBankCardResp, error)
 	// 提现订单查询
 	QueryExtractOrder(ctx context.Context, in *QueryExtractOrderReq, opts ...grpc.CallOption) (*QueryExtractOrderResp, error)
@@ -78,28 +80,26 @@ type TradeClient interface {
 	GetExtractLogs(ctx context.Context, in *GetExtractLogsReq, opts ...grpc.CallOption) (*GetExtractLogsResp, error)
 	// 检查用户是否被提现封控
 	CheckUserExtractRisk(ctx context.Context, in *CheckUserExtractRiskReq, opts ...grpc.CallOption) (*CheckUserExtractRiskResp, error)
-	// 新生个人开户
-	HnapayNewSelfAccount(ctx context.Context, in *HnapayNewSelfAccountReq, opts ...grpc.CallOption) (*HnapayNewSelfAccountResp, error)
-	// 新生个人用户绑卡
-	HnapayBindBankCard(ctx context.Context, in *HnapayBindBankCardReq, opts ...grpc.CallOption) (*HnapayBindBankCardResp, error)
-	// 新生个人用户绑卡确认
-	HnapayBindBankCardConfirm(ctx context.Context, in *HnapayBindBankCardConfirmReq, opts ...grpc.CallOption) (*HnapayBindBankCardConfirmResp, error)
-	// 新生个人用户解绑银行卡
-	HnapayUnbindBankCard(ctx context.Context, in *HnapayUnbindBankCardReq, opts ...grpc.CallOption) (*HnapayUnbindBankCardResp, error)
-	// 新生快捷支付下单：银行卡充值
-	HnapayQuickPayOrder(ctx context.Context, in *HnapayQuickPayOrderReq, opts ...grpc.CallOption) (*HnapayQuickPayOrderResp, error)
-	// 新生快捷支付确认
-	HnapayQuickPayConfirm(ctx context.Context, in *HnapayQuickPayConfirmReq, opts ...grpc.CallOption) (*HnapayQuickPayConfirmResp, error)
-	// 新生转账
-	HnapayTransfer(ctx context.Context, in *HnapayTransferReq, opts ...grpc.CallOption) (*HnapayTransferResp, error)
-	// 新生提现
-	HnapayWithdraw(ctx context.Context, in *HnapayWithdrawReq, opts ...grpc.CallOption) (*HnapayWithdrawResp, error)
-	// 新生查询用户账户信息
-	HnapayCheckUserAccountInfo(ctx context.Context, in *HnapayCheckUserAccountInfoReq, opts ...grpc.CallOption) (*HnapayCheckUserAccountInfoResp, error)
+	// mallbook个人开户
+	MallBookNewSelfAccount(ctx context.Context, in *MallBookNewSelfAccountReq, opts ...grpc.CallOption) (*MallBookNewSelfAccountResp, error)
+	// mallbook个人用户绑卡
+	MallBookBindBankCard(ctx context.Context, in *MallBookBindBankCardReq, opts ...grpc.CallOption) (*MallBookBindBankCardResp, error)
+	// mallbook个人用户解绑银行卡
+	MallBookUnbindBankCard(ctx context.Context, in *MallBookUnbindBankCardReq, opts ...grpc.CallOption) (*MallBookUnbindBankCardResp, error)
+	// mallbook充值
+	MallBookDeposit(ctx context.Context, in *MallBookDepositReq, opts ...grpc.CallOption) (*MallBookDepositResp, error)
+	// mallbook转账
+	MallBookTransfer(ctx context.Context, in *MallBookTransferReq, opts ...grpc.CallOption) (*MallBookTransferResp, error)
+	// mallbook提现
+	MallBookWithdraw(ctx context.Context, in *MallBookWithdrawReq, opts ...grpc.CallOption) (*MallBookWithdrawResp, error)
+	// mallbook查询用户账户信息
+	MallBookCheckUserAccountInfo(ctx context.Context, in *MallBookCheckUserAccountInfoReq, opts ...grpc.CallOption) (*MallBookCheckUserAccountInfoResp, error)
 	// 获取系统账户信息
 	GetNcountAccountInfo(ctx context.Context, in *GetNcountAccountInfoReq, opts ...grpc.CallOption) (*GetNcountAccountInfoResp, error)
 	// 设置支付密码
 	SetPaymentSecret(ctx context.Context, in *SetPaymentSecretReq, opts ...grpc.CallOption) (*SetPaymentSecretResp, error)
+	// 获取微信openid
+	GetOpenIDByCode(ctx context.Context, in *GetOpenIDByCodeReq, opts ...grpc.CallOption) (*GetOpenIDByCodeResp, error)
 }
 
 type tradeClient struct {
@@ -134,6 +134,16 @@ func (c *tradeClient) JsapiPrepaid(ctx context.Context, in *PrepaidReq, opts ...
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(JsapiPrepaidResp)
 	err := c.cc.Invoke(ctx, Trade_JsapiPrepaid_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tradeClient) JsapiRepaid(ctx context.Context, in *JsapiRepaidReq, opts ...grpc.CallOption) (*JsapiPrepaidResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(JsapiPrepaidResp)
+	err := c.cc.Invoke(ctx, Trade_JsapiRepaid_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -250,90 +260,70 @@ func (c *tradeClient) CheckUserExtractRisk(ctx context.Context, in *CheckUserExt
 	return out, nil
 }
 
-func (c *tradeClient) HnapayNewSelfAccount(ctx context.Context, in *HnapayNewSelfAccountReq, opts ...grpc.CallOption) (*HnapayNewSelfAccountResp, error) {
+func (c *tradeClient) MallBookNewSelfAccount(ctx context.Context, in *MallBookNewSelfAccountReq, opts ...grpc.CallOption) (*MallBookNewSelfAccountResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HnapayNewSelfAccountResp)
-	err := c.cc.Invoke(ctx, Trade_HnapayNewSelfAccount_FullMethodName, in, out, cOpts...)
+	out := new(MallBookNewSelfAccountResp)
+	err := c.cc.Invoke(ctx, Trade_MallBookNewSelfAccount_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tradeClient) HnapayBindBankCard(ctx context.Context, in *HnapayBindBankCardReq, opts ...grpc.CallOption) (*HnapayBindBankCardResp, error) {
+func (c *tradeClient) MallBookBindBankCard(ctx context.Context, in *MallBookBindBankCardReq, opts ...grpc.CallOption) (*MallBookBindBankCardResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HnapayBindBankCardResp)
-	err := c.cc.Invoke(ctx, Trade_HnapayBindBankCard_FullMethodName, in, out, cOpts...)
+	out := new(MallBookBindBankCardResp)
+	err := c.cc.Invoke(ctx, Trade_MallBookBindBankCard_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tradeClient) HnapayBindBankCardConfirm(ctx context.Context, in *HnapayBindBankCardConfirmReq, opts ...grpc.CallOption) (*HnapayBindBankCardConfirmResp, error) {
+func (c *tradeClient) MallBookUnbindBankCard(ctx context.Context, in *MallBookUnbindBankCardReq, opts ...grpc.CallOption) (*MallBookUnbindBankCardResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HnapayBindBankCardConfirmResp)
-	err := c.cc.Invoke(ctx, Trade_HnapayBindBankCardConfirm_FullMethodName, in, out, cOpts...)
+	out := new(MallBookUnbindBankCardResp)
+	err := c.cc.Invoke(ctx, Trade_MallBookUnbindBankCard_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tradeClient) HnapayUnbindBankCard(ctx context.Context, in *HnapayUnbindBankCardReq, opts ...grpc.CallOption) (*HnapayUnbindBankCardResp, error) {
+func (c *tradeClient) MallBookDeposit(ctx context.Context, in *MallBookDepositReq, opts ...grpc.CallOption) (*MallBookDepositResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HnapayUnbindBankCardResp)
-	err := c.cc.Invoke(ctx, Trade_HnapayUnbindBankCard_FullMethodName, in, out, cOpts...)
+	out := new(MallBookDepositResp)
+	err := c.cc.Invoke(ctx, Trade_MallBookDeposit_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tradeClient) HnapayQuickPayOrder(ctx context.Context, in *HnapayQuickPayOrderReq, opts ...grpc.CallOption) (*HnapayQuickPayOrderResp, error) {
+func (c *tradeClient) MallBookTransfer(ctx context.Context, in *MallBookTransferReq, opts ...grpc.CallOption) (*MallBookTransferResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HnapayQuickPayOrderResp)
-	err := c.cc.Invoke(ctx, Trade_HnapayQuickPayOrder_FullMethodName, in, out, cOpts...)
+	out := new(MallBookTransferResp)
+	err := c.cc.Invoke(ctx, Trade_MallBookTransfer_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tradeClient) HnapayQuickPayConfirm(ctx context.Context, in *HnapayQuickPayConfirmReq, opts ...grpc.CallOption) (*HnapayQuickPayConfirmResp, error) {
+func (c *tradeClient) MallBookWithdraw(ctx context.Context, in *MallBookWithdrawReq, opts ...grpc.CallOption) (*MallBookWithdrawResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HnapayQuickPayConfirmResp)
-	err := c.cc.Invoke(ctx, Trade_HnapayQuickPayConfirm_FullMethodName, in, out, cOpts...)
+	out := new(MallBookWithdrawResp)
+	err := c.cc.Invoke(ctx, Trade_MallBookWithdraw_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tradeClient) HnapayTransfer(ctx context.Context, in *HnapayTransferReq, opts ...grpc.CallOption) (*HnapayTransferResp, error) {
+func (c *tradeClient) MallBookCheckUserAccountInfo(ctx context.Context, in *MallBookCheckUserAccountInfoReq, opts ...grpc.CallOption) (*MallBookCheckUserAccountInfoResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HnapayTransferResp)
-	err := c.cc.Invoke(ctx, Trade_HnapayTransfer_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *tradeClient) HnapayWithdraw(ctx context.Context, in *HnapayWithdrawReq, opts ...grpc.CallOption) (*HnapayWithdrawResp, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HnapayWithdrawResp)
-	err := c.cc.Invoke(ctx, Trade_HnapayWithdraw_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *tradeClient) HnapayCheckUserAccountInfo(ctx context.Context, in *HnapayCheckUserAccountInfoReq, opts ...grpc.CallOption) (*HnapayCheckUserAccountInfoResp, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HnapayCheckUserAccountInfoResp)
-	err := c.cc.Invoke(ctx, Trade_HnapayCheckUserAccountInfo_FullMethodName, in, out, cOpts...)
+	out := new(MallBookCheckUserAccountInfoResp)
+	err := c.cc.Invoke(ctx, Trade_MallBookCheckUserAccountInfo_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -360,6 +350,16 @@ func (c *tradeClient) SetPaymentSecret(ctx context.Context, in *SetPaymentSecret
 	return out, nil
 }
 
+func (c *tradeClient) GetOpenIDByCode(ctx context.Context, in *GetOpenIDByCodeReq, opts ...grpc.CallOption) (*GetOpenIDByCodeResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetOpenIDByCodeResp)
+	err := c.cc.Invoke(ctx, Trade_GetOpenIDByCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TradeServer is the server API for Trade service.
 // All implementations must embed UnimplementedTradeServer
 // for forward compatibility.
@@ -368,15 +368,17 @@ type TradeServer interface {
 	H5Prepaid(context.Context, *PrepaidReq) (*H5PrepaidResp, error)
 	// app下单
 	AppPrepaid(context.Context, *PrepaidReq) (*AppPrepaidResp, error)
-	// jsapi下单
+	// jsapi预下单
 	JsapiPrepaid(context.Context, *PrepaidReq) (*JsapiPrepaidResp, error)
+	// jsapi预支付
+	JsapiRepaid(context.Context, *JsapiRepaidReq) (*JsapiPrepaidResp, error)
 	// 订单查询
 	QueryOrder(context.Context, *QueryOrderReq) (*QueryOrderResp, error)
 	// 取消订单
 	CancelOrder(context.Context, *CancelOrderReq) (*CancelOrderResp, error)
 	// 订单退款
 	RefundOrder(context.Context, *RefundOrderReq) (*RefundOrderResp, error)
-	// 新生账户提现至银行卡
+	// mallbook账户提现至银行卡：先转账至子商户，子商户自动结算
 	WithdrawBankCard(context.Context, *WithdrawBankCardReq) (*WithdrawBankCardResp, error)
 	// 提现订单查询
 	QueryExtractOrder(context.Context, *QueryExtractOrderReq) (*QueryExtractOrderResp, error)
@@ -392,28 +394,26 @@ type TradeServer interface {
 	GetExtractLogs(context.Context, *GetExtractLogsReq) (*GetExtractLogsResp, error)
 	// 检查用户是否被提现封控
 	CheckUserExtractRisk(context.Context, *CheckUserExtractRiskReq) (*CheckUserExtractRiskResp, error)
-	// 新生个人开户
-	HnapayNewSelfAccount(context.Context, *HnapayNewSelfAccountReq) (*HnapayNewSelfAccountResp, error)
-	// 新生个人用户绑卡
-	HnapayBindBankCard(context.Context, *HnapayBindBankCardReq) (*HnapayBindBankCardResp, error)
-	// 新生个人用户绑卡确认
-	HnapayBindBankCardConfirm(context.Context, *HnapayBindBankCardConfirmReq) (*HnapayBindBankCardConfirmResp, error)
-	// 新生个人用户解绑银行卡
-	HnapayUnbindBankCard(context.Context, *HnapayUnbindBankCardReq) (*HnapayUnbindBankCardResp, error)
-	// 新生快捷支付下单：银行卡充值
-	HnapayQuickPayOrder(context.Context, *HnapayQuickPayOrderReq) (*HnapayQuickPayOrderResp, error)
-	// 新生快捷支付确认
-	HnapayQuickPayConfirm(context.Context, *HnapayQuickPayConfirmReq) (*HnapayQuickPayConfirmResp, error)
-	// 新生转账
-	HnapayTransfer(context.Context, *HnapayTransferReq) (*HnapayTransferResp, error)
-	// 新生提现
-	HnapayWithdraw(context.Context, *HnapayWithdrawReq) (*HnapayWithdrawResp, error)
-	// 新生查询用户账户信息
-	HnapayCheckUserAccountInfo(context.Context, *HnapayCheckUserAccountInfoReq) (*HnapayCheckUserAccountInfoResp, error)
+	// mallbook个人开户
+	MallBookNewSelfAccount(context.Context, *MallBookNewSelfAccountReq) (*MallBookNewSelfAccountResp, error)
+	// mallbook个人用户绑卡
+	MallBookBindBankCard(context.Context, *MallBookBindBankCardReq) (*MallBookBindBankCardResp, error)
+	// mallbook个人用户解绑银行卡
+	MallBookUnbindBankCard(context.Context, *MallBookUnbindBankCardReq) (*MallBookUnbindBankCardResp, error)
+	// mallbook充值
+	MallBookDeposit(context.Context, *MallBookDepositReq) (*MallBookDepositResp, error)
+	// mallbook转账
+	MallBookTransfer(context.Context, *MallBookTransferReq) (*MallBookTransferResp, error)
+	// mallbook提现
+	MallBookWithdraw(context.Context, *MallBookWithdrawReq) (*MallBookWithdrawResp, error)
+	// mallbook查询用户账户信息
+	MallBookCheckUserAccountInfo(context.Context, *MallBookCheckUserAccountInfoReq) (*MallBookCheckUserAccountInfoResp, error)
 	// 获取系统账户信息
 	GetNcountAccountInfo(context.Context, *GetNcountAccountInfoReq) (*GetNcountAccountInfoResp, error)
 	// 设置支付密码
 	SetPaymentSecret(context.Context, *SetPaymentSecretReq) (*SetPaymentSecretResp, error)
+	// 获取微信openid
+	GetOpenIDByCode(context.Context, *GetOpenIDByCodeReq) (*GetOpenIDByCodeResp, error)
 	mustEmbedUnimplementedTradeServer()
 }
 
@@ -432,6 +432,9 @@ func (UnimplementedTradeServer) AppPrepaid(context.Context, *PrepaidReq) (*AppPr
 }
 func (UnimplementedTradeServer) JsapiPrepaid(context.Context, *PrepaidReq) (*JsapiPrepaidResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method JsapiPrepaid not implemented")
+}
+func (UnimplementedTradeServer) JsapiRepaid(context.Context, *JsapiRepaidReq) (*JsapiPrepaidResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method JsapiRepaid not implemented")
 }
 func (UnimplementedTradeServer) QueryOrder(context.Context, *QueryOrderReq) (*QueryOrderResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryOrder not implemented")
@@ -466,38 +469,35 @@ func (UnimplementedTradeServer) GetExtractLogs(context.Context, *GetExtractLogsR
 func (UnimplementedTradeServer) CheckUserExtractRisk(context.Context, *CheckUserExtractRiskReq) (*CheckUserExtractRiskResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckUserExtractRisk not implemented")
 }
-func (UnimplementedTradeServer) HnapayNewSelfAccount(context.Context, *HnapayNewSelfAccountReq) (*HnapayNewSelfAccountResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HnapayNewSelfAccount not implemented")
+func (UnimplementedTradeServer) MallBookNewSelfAccount(context.Context, *MallBookNewSelfAccountReq) (*MallBookNewSelfAccountResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MallBookNewSelfAccount not implemented")
 }
-func (UnimplementedTradeServer) HnapayBindBankCard(context.Context, *HnapayBindBankCardReq) (*HnapayBindBankCardResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HnapayBindBankCard not implemented")
+func (UnimplementedTradeServer) MallBookBindBankCard(context.Context, *MallBookBindBankCardReq) (*MallBookBindBankCardResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MallBookBindBankCard not implemented")
 }
-func (UnimplementedTradeServer) HnapayBindBankCardConfirm(context.Context, *HnapayBindBankCardConfirmReq) (*HnapayBindBankCardConfirmResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HnapayBindBankCardConfirm not implemented")
+func (UnimplementedTradeServer) MallBookUnbindBankCard(context.Context, *MallBookUnbindBankCardReq) (*MallBookUnbindBankCardResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MallBookUnbindBankCard not implemented")
 }
-func (UnimplementedTradeServer) HnapayUnbindBankCard(context.Context, *HnapayUnbindBankCardReq) (*HnapayUnbindBankCardResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HnapayUnbindBankCard not implemented")
+func (UnimplementedTradeServer) MallBookDeposit(context.Context, *MallBookDepositReq) (*MallBookDepositResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MallBookDeposit not implemented")
 }
-func (UnimplementedTradeServer) HnapayQuickPayOrder(context.Context, *HnapayQuickPayOrderReq) (*HnapayQuickPayOrderResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HnapayQuickPayOrder not implemented")
+func (UnimplementedTradeServer) MallBookTransfer(context.Context, *MallBookTransferReq) (*MallBookTransferResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MallBookTransfer not implemented")
 }
-func (UnimplementedTradeServer) HnapayQuickPayConfirm(context.Context, *HnapayQuickPayConfirmReq) (*HnapayQuickPayConfirmResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HnapayQuickPayConfirm not implemented")
+func (UnimplementedTradeServer) MallBookWithdraw(context.Context, *MallBookWithdrawReq) (*MallBookWithdrawResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MallBookWithdraw not implemented")
 }
-func (UnimplementedTradeServer) HnapayTransfer(context.Context, *HnapayTransferReq) (*HnapayTransferResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HnapayTransfer not implemented")
-}
-func (UnimplementedTradeServer) HnapayWithdraw(context.Context, *HnapayWithdrawReq) (*HnapayWithdrawResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HnapayWithdraw not implemented")
-}
-func (UnimplementedTradeServer) HnapayCheckUserAccountInfo(context.Context, *HnapayCheckUserAccountInfoReq) (*HnapayCheckUserAccountInfoResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HnapayCheckUserAccountInfo not implemented")
+func (UnimplementedTradeServer) MallBookCheckUserAccountInfo(context.Context, *MallBookCheckUserAccountInfoReq) (*MallBookCheckUserAccountInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MallBookCheckUserAccountInfo not implemented")
 }
 func (UnimplementedTradeServer) GetNcountAccountInfo(context.Context, *GetNcountAccountInfoReq) (*GetNcountAccountInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetNcountAccountInfo not implemented")
 }
 func (UnimplementedTradeServer) SetPaymentSecret(context.Context, *SetPaymentSecretReq) (*SetPaymentSecretResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetPaymentSecret not implemented")
+}
+func (UnimplementedTradeServer) GetOpenIDByCode(context.Context, *GetOpenIDByCodeReq) (*GetOpenIDByCodeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOpenIDByCode not implemented")
 }
 func (UnimplementedTradeServer) mustEmbedUnimplementedTradeServer() {}
 func (UnimplementedTradeServer) testEmbeddedByValue()               {}
@@ -570,6 +570,24 @@ func _Trade_JsapiPrepaid_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TradeServer).JsapiPrepaid(ctx, req.(*PrepaidReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Trade_JsapiRepaid_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(JsapiRepaidReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TradeServer).JsapiRepaid(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Trade_JsapiRepaid_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TradeServer).JsapiRepaid(ctx, req.(*JsapiRepaidReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -772,164 +790,128 @@ func _Trade_CheckUserExtractRisk_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Trade_HnapayNewSelfAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HnapayNewSelfAccountReq)
+func _Trade_MallBookNewSelfAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MallBookNewSelfAccountReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TradeServer).HnapayNewSelfAccount(ctx, in)
+		return srv.(TradeServer).MallBookNewSelfAccount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Trade_HnapayNewSelfAccount_FullMethodName,
+		FullMethod: Trade_MallBookNewSelfAccount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TradeServer).HnapayNewSelfAccount(ctx, req.(*HnapayNewSelfAccountReq))
+		return srv.(TradeServer).MallBookNewSelfAccount(ctx, req.(*MallBookNewSelfAccountReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Trade_HnapayBindBankCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HnapayBindBankCardReq)
+func _Trade_MallBookBindBankCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MallBookBindBankCardReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TradeServer).HnapayBindBankCard(ctx, in)
+		return srv.(TradeServer).MallBookBindBankCard(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Trade_HnapayBindBankCard_FullMethodName,
+		FullMethod: Trade_MallBookBindBankCard_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TradeServer).HnapayBindBankCard(ctx, req.(*HnapayBindBankCardReq))
+		return srv.(TradeServer).MallBookBindBankCard(ctx, req.(*MallBookBindBankCardReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Trade_HnapayBindBankCardConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HnapayBindBankCardConfirmReq)
+func _Trade_MallBookUnbindBankCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MallBookUnbindBankCardReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TradeServer).HnapayBindBankCardConfirm(ctx, in)
+		return srv.(TradeServer).MallBookUnbindBankCard(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Trade_HnapayBindBankCardConfirm_FullMethodName,
+		FullMethod: Trade_MallBookUnbindBankCard_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TradeServer).HnapayBindBankCardConfirm(ctx, req.(*HnapayBindBankCardConfirmReq))
+		return srv.(TradeServer).MallBookUnbindBankCard(ctx, req.(*MallBookUnbindBankCardReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Trade_HnapayUnbindBankCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HnapayUnbindBankCardReq)
+func _Trade_MallBookDeposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MallBookDepositReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TradeServer).HnapayUnbindBankCard(ctx, in)
+		return srv.(TradeServer).MallBookDeposit(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Trade_HnapayUnbindBankCard_FullMethodName,
+		FullMethod: Trade_MallBookDeposit_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TradeServer).HnapayUnbindBankCard(ctx, req.(*HnapayUnbindBankCardReq))
+		return srv.(TradeServer).MallBookDeposit(ctx, req.(*MallBookDepositReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Trade_HnapayQuickPayOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HnapayQuickPayOrderReq)
+func _Trade_MallBookTransfer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MallBookTransferReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TradeServer).HnapayQuickPayOrder(ctx, in)
+		return srv.(TradeServer).MallBookTransfer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Trade_HnapayQuickPayOrder_FullMethodName,
+		FullMethod: Trade_MallBookTransfer_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TradeServer).HnapayQuickPayOrder(ctx, req.(*HnapayQuickPayOrderReq))
+		return srv.(TradeServer).MallBookTransfer(ctx, req.(*MallBookTransferReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Trade_HnapayQuickPayConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HnapayQuickPayConfirmReq)
+func _Trade_MallBookWithdraw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MallBookWithdrawReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TradeServer).HnapayQuickPayConfirm(ctx, in)
+		return srv.(TradeServer).MallBookWithdraw(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Trade_HnapayQuickPayConfirm_FullMethodName,
+		FullMethod: Trade_MallBookWithdraw_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TradeServer).HnapayQuickPayConfirm(ctx, req.(*HnapayQuickPayConfirmReq))
+		return srv.(TradeServer).MallBookWithdraw(ctx, req.(*MallBookWithdrawReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Trade_HnapayTransfer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HnapayTransferReq)
+func _Trade_MallBookCheckUserAccountInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MallBookCheckUserAccountInfoReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TradeServer).HnapayTransfer(ctx, in)
+		return srv.(TradeServer).MallBookCheckUserAccountInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Trade_HnapayTransfer_FullMethodName,
+		FullMethod: Trade_MallBookCheckUserAccountInfo_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TradeServer).HnapayTransfer(ctx, req.(*HnapayTransferReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Trade_HnapayWithdraw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HnapayWithdrawReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TradeServer).HnapayWithdraw(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Trade_HnapayWithdraw_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TradeServer).HnapayWithdraw(ctx, req.(*HnapayWithdrawReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Trade_HnapayCheckUserAccountInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HnapayCheckUserAccountInfoReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TradeServer).HnapayCheckUserAccountInfo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Trade_HnapayCheckUserAccountInfo_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TradeServer).HnapayCheckUserAccountInfo(ctx, req.(*HnapayCheckUserAccountInfoReq))
+		return srv.(TradeServer).MallBookCheckUserAccountInfo(ctx, req.(*MallBookCheckUserAccountInfoReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -970,6 +952,24 @@ func _Trade_SetPaymentSecret_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Trade_GetOpenIDByCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetOpenIDByCodeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TradeServer).GetOpenIDByCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Trade_GetOpenIDByCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TradeServer).GetOpenIDByCode(ctx, req.(*GetOpenIDByCodeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Trade_ServiceDesc is the grpc.ServiceDesc for Trade service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -988,6 +988,10 @@ var Trade_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "jsapiPrepaid",
 			Handler:    _Trade_JsapiPrepaid_Handler,
+		},
+		{
+			MethodName: "jsapiRepaid",
+			Handler:    _Trade_JsapiRepaid_Handler,
 		},
 		{
 			MethodName: "queryOrder",
@@ -1034,40 +1038,32 @@ var Trade_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Trade_CheckUserExtractRisk_Handler,
 		},
 		{
-			MethodName: "hnapayNewSelfAccount",
-			Handler:    _Trade_HnapayNewSelfAccount_Handler,
+			MethodName: "mallBookNewSelfAccount",
+			Handler:    _Trade_MallBookNewSelfAccount_Handler,
 		},
 		{
-			MethodName: "hnapayBindBankCard",
-			Handler:    _Trade_HnapayBindBankCard_Handler,
+			MethodName: "mallBookBindBankCard",
+			Handler:    _Trade_MallBookBindBankCard_Handler,
 		},
 		{
-			MethodName: "hnapayBindBankCardConfirm",
-			Handler:    _Trade_HnapayBindBankCardConfirm_Handler,
+			MethodName: "mallBookUnbindBankCard",
+			Handler:    _Trade_MallBookUnbindBankCard_Handler,
 		},
 		{
-			MethodName: "hnapayUnbindBankCard",
-			Handler:    _Trade_HnapayUnbindBankCard_Handler,
+			MethodName: "mallBookDeposit",
+			Handler:    _Trade_MallBookDeposit_Handler,
 		},
 		{
-			MethodName: "hnapayQuickPayOrder",
-			Handler:    _Trade_HnapayQuickPayOrder_Handler,
+			MethodName: "mallBookTransfer",
+			Handler:    _Trade_MallBookTransfer_Handler,
 		},
 		{
-			MethodName: "hnapayQuickPayConfirm",
-			Handler:    _Trade_HnapayQuickPayConfirm_Handler,
+			MethodName: "mallBookWithdraw",
+			Handler:    _Trade_MallBookWithdraw_Handler,
 		},
 		{
-			MethodName: "hnapayTransfer",
-			Handler:    _Trade_HnapayTransfer_Handler,
-		},
-		{
-			MethodName: "hnapayWithdraw",
-			Handler:    _Trade_HnapayWithdraw_Handler,
-		},
-		{
-			MethodName: "hnapayCheckUserAccountInfo",
-			Handler:    _Trade_HnapayCheckUserAccountInfo_Handler,
+			MethodName: "mallBookCheckUserAccountInfo",
+			Handler:    _Trade_MallBookCheckUserAccountInfo_Handler,
 		},
 		{
 			MethodName: "getNcountAccountInfo",
@@ -1076,6 +1072,10 @@ var Trade_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "setPaymentSecret",
 			Handler:    _Trade_SetPaymentSecret_Handler,
+		},
+		{
+			MethodName: "getOpenIDByCode",
+			Handler:    _Trade_GetOpenIDByCode_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
