@@ -2370,7 +2370,7 @@ func (x *MallBookNewSelfAccountResp) GetData() *MallBookNewSelfAccountData {
 // mallbook个人用户绑卡请求
 type MallBookBindBankCardReq struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 业务编码
+	// 业务编码: 竞技、B1003
 	BizCode string `protobuf:"bytes,1,opt,name=biz_code,json=bizCode,proto3" json:"biz_code,omitempty"`
 	// 支付编码
 	PmCode string `protobuf:"bytes,2,opt,name=pm_code,json=pmCode,proto3" json:"pm_code,omitempty"`
@@ -2380,8 +2380,14 @@ type MallBookBindBankCardReq struct {
 	HolderName string `protobuf:"bytes,4,opt,name=holder_name,json=holderName,proto3" json:"holder_name,omitempty"`
 	// 银行签约手机号
 	Mobile string `protobuf:"bytes,5,opt,name=mobile,proto3" json:"mobile,omitempty"`
+	// 绑卡业务：1、结算卡，2、快捷支付卡
+	BindCardType uint32 `protobuf:"varint,6,opt,name=bind_card_type,json=bindCardType,proto3" json:"bind_card_type,omitempty"`
 	// 银行编码
-	BankCode      string `protobuf:"bytes,6,opt,name=bank_code,json=bankCode,proto3" json:"bank_code,omitempty"`
+	BankCode string `protobuf:"bytes,7,opt,name=bank_code,json=bankCode,proto3" json:"bank_code,omitempty"`
+	// 信用卡验证码: 若银行卡为信用卡时必填
+	VipCode string `protobuf:"bytes,8,opt,name=vip_code,json=vipCode,proto3" json:"vip_code,omitempty"`
+	// 信用卡有效期: 若银行卡为信用卡时必填
+	Expiration    string `protobuf:"bytes,9,opt,name=expiration,proto3" json:"expiration,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2451,9 +2457,30 @@ func (x *MallBookBindBankCardReq) GetMobile() string {
 	return ""
 }
 
+func (x *MallBookBindBankCardReq) GetBindCardType() uint32 {
+	if x != nil {
+		return x.BindCardType
+	}
+	return 0
+}
+
 func (x *MallBookBindBankCardReq) GetBankCode() string {
 	if x != nil {
 		return x.BankCode
+	}
+	return ""
+}
+
+func (x *MallBookBindBankCardReq) GetVipCode() string {
+	if x != nil {
+		return x.VipCode
+	}
+	return ""
+}
+
+func (x *MallBookBindBankCardReq) GetExpiration() string {
+	if x != nil {
+		return x.Expiration
 	}
 	return ""
 }
@@ -2511,20 +2538,128 @@ func (x *MallBookBindBankCardResp) GetMsg() string {
 	return ""
 }
 
+// mallbook个人用户绑卡确认
+type MallBookBindBankCardConfirmReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	BankCardId    uint32                 `protobuf:"varint,1,opt,name=bank_card_id,json=bankCardId,proto3" json:"bank_card_id,omitempty"` // 银行卡ID
+	SmsCode       string                 `protobuf:"bytes,2,opt,name=sms_code,json=smsCode,proto3" json:"sms_code,omitempty"`             // 短信验证码
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MallBookBindBankCardConfirmReq) Reset() {
+	*x = MallBookBindBankCardConfirmReq{}
+	mi := &file_chess_trade_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MallBookBindBankCardConfirmReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MallBookBindBankCardConfirmReq) ProtoMessage() {}
+
+func (x *MallBookBindBankCardConfirmReq) ProtoReflect() protoreflect.Message {
+	mi := &file_chess_trade_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MallBookBindBankCardConfirmReq.ProtoReflect.Descriptor instead.
+func (*MallBookBindBankCardConfirmReq) Descriptor() ([]byte, []int) {
+	return file_chess_trade_proto_rawDescGZIP(), []int{36}
+}
+
+func (x *MallBookBindBankCardConfirmReq) GetBankCardId() uint32 {
+	if x != nil {
+		return x.BankCardId
+	}
+	return 0
+}
+
+func (x *MallBookBindBankCardConfirmReq) GetSmsCode() string {
+	if x != nil {
+		return x.SmsCode
+	}
+	return ""
+}
+
+// mallbook个人用户绑卡确认
+type MallBookBindBankCardConfirmResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"` // 0: OK, 否则失败
+	Msg           string                 `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`    // 信息描述
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MallBookBindBankCardConfirmResp) Reset() {
+	*x = MallBookBindBankCardConfirmResp{}
+	mi := &file_chess_trade_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MallBookBindBankCardConfirmResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MallBookBindBankCardConfirmResp) ProtoMessage() {}
+
+func (x *MallBookBindBankCardConfirmResp) ProtoReflect() protoreflect.Message {
+	mi := &file_chess_trade_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MallBookBindBankCardConfirmResp.ProtoReflect.Descriptor instead.
+func (*MallBookBindBankCardConfirmResp) Descriptor() ([]byte, []int) {
+	return file_chess_trade_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *MallBookBindBankCardConfirmResp) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *MallBookBindBankCardConfirmResp) GetMsg() string {
+	if x != nil {
+		return x.Msg
+	}
+	return ""
+}
+
 // mallbook个人用户解绑银行卡请求
 type MallBookUnbindBankCardReq struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 业务编码
 	BizCode string `protobuf:"bytes,1,opt,name=biz_code,json=bizCode,proto3" json:"biz_code,omitempty"`
 	// 支付编码
-	PmCode        string `protobuf:"bytes,2,opt,name=pm_code,json=pmCode,proto3" json:"pm_code,omitempty"`
+	PmCode string `protobuf:"bytes,2,opt,name=pm_code,json=pmCode,proto3" json:"pm_code,omitempty"`
+	// 绑卡业务：1、结算卡，2、快捷支付卡
+	BindCardType  uint32 `protobuf:"varint,3,opt,name=bind_card_type,json=bindCardType,proto3" json:"bind_card_type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *MallBookUnbindBankCardReq) Reset() {
 	*x = MallBookUnbindBankCardReq{}
-	mi := &file_chess_trade_proto_msgTypes[36]
+	mi := &file_chess_trade_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2536,7 +2671,7 @@ func (x *MallBookUnbindBankCardReq) String() string {
 func (*MallBookUnbindBankCardReq) ProtoMessage() {}
 
 func (x *MallBookUnbindBankCardReq) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[36]
+	mi := &file_chess_trade_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2549,7 +2684,7 @@ func (x *MallBookUnbindBankCardReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookUnbindBankCardReq.ProtoReflect.Descriptor instead.
 func (*MallBookUnbindBankCardReq) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{36}
+	return file_chess_trade_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *MallBookUnbindBankCardReq) GetBizCode() string {
@@ -2566,6 +2701,13 @@ func (x *MallBookUnbindBankCardReq) GetPmCode() string {
 	return ""
 }
 
+func (x *MallBookUnbindBankCardReq) GetBindCardType() uint32 {
+	if x != nil {
+		return x.BindCardType
+	}
+	return 0
+}
+
 // mallbook个人用户解绑银行卡响应
 type MallBookUnbindBankCardResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -2577,7 +2719,7 @@ type MallBookUnbindBankCardResp struct {
 
 func (x *MallBookUnbindBankCardResp) Reset() {
 	*x = MallBookUnbindBankCardResp{}
-	mi := &file_chess_trade_proto_msgTypes[37]
+	mi := &file_chess_trade_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2589,7 +2731,7 @@ func (x *MallBookUnbindBankCardResp) String() string {
 func (*MallBookUnbindBankCardResp) ProtoMessage() {}
 
 func (x *MallBookUnbindBankCardResp) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[37]
+	mi := &file_chess_trade_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2602,7 +2744,7 @@ func (x *MallBookUnbindBankCardResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookUnbindBankCardResp.ProtoReflect.Descriptor instead.
 func (*MallBookUnbindBankCardResp) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{37}
+	return file_chess_trade_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *MallBookUnbindBankCardResp) GetCode() int32 {
@@ -2638,7 +2780,7 @@ type MallBookDepositReq struct {
 
 func (x *MallBookDepositReq) Reset() {
 	*x = MallBookDepositReq{}
-	mi := &file_chess_trade_proto_msgTypes[38]
+	mi := &file_chess_trade_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2650,7 +2792,7 @@ func (x *MallBookDepositReq) String() string {
 func (*MallBookDepositReq) ProtoMessage() {}
 
 func (x *MallBookDepositReq) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[38]
+	mi := &file_chess_trade_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2663,7 +2805,7 @@ func (x *MallBookDepositReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookDepositReq.ProtoReflect.Descriptor instead.
 func (*MallBookDepositReq) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{38}
+	return file_chess_trade_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *MallBookDepositReq) GetBizCode() string {
@@ -2725,7 +2867,7 @@ type MallBookDepositResp struct {
 
 func (x *MallBookDepositResp) Reset() {
 	*x = MallBookDepositResp{}
-	mi := &file_chess_trade_proto_msgTypes[39]
+	mi := &file_chess_trade_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2737,7 +2879,7 @@ func (x *MallBookDepositResp) String() string {
 func (*MallBookDepositResp) ProtoMessage() {}
 
 func (x *MallBookDepositResp) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[39]
+	mi := &file_chess_trade_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2750,7 +2892,7 @@ func (x *MallBookDepositResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookDepositResp.ProtoReflect.Descriptor instead.
 func (*MallBookDepositResp) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{39}
+	return file_chess_trade_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *MallBookDepositResp) GetCode() int32 {
@@ -2834,7 +2976,7 @@ type MallBookTransferReq struct {
 
 func (x *MallBookTransferReq) Reset() {
 	*x = MallBookTransferReq{}
-	mi := &file_chess_trade_proto_msgTypes[40]
+	mi := &file_chess_trade_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2846,7 +2988,7 @@ func (x *MallBookTransferReq) String() string {
 func (*MallBookTransferReq) ProtoMessage() {}
 
 func (x *MallBookTransferReq) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[40]
+	mi := &file_chess_trade_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2859,7 +3001,7 @@ func (x *MallBookTransferReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookTransferReq.ProtoReflect.Descriptor instead.
 func (*MallBookTransferReq) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{40}
+	return file_chess_trade_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *MallBookTransferReq) GetBizCode() string {
@@ -2934,7 +3076,7 @@ type MallBookTransferInfo struct {
 
 func (x *MallBookTransferInfo) Reset() {
 	*x = MallBookTransferInfo{}
-	mi := &file_chess_trade_proto_msgTypes[41]
+	mi := &file_chess_trade_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2946,7 +3088,7 @@ func (x *MallBookTransferInfo) String() string {
 func (*MallBookTransferInfo) ProtoMessage() {}
 
 func (x *MallBookTransferInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[41]
+	mi := &file_chess_trade_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2959,7 +3101,7 @@ func (x *MallBookTransferInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookTransferInfo.ProtoReflect.Descriptor instead.
 func (*MallBookTransferInfo) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{41}
+	return file_chess_trade_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *MallBookTransferInfo) GetMerOrderId() string {
@@ -2999,7 +3141,7 @@ type MallBookTransferData struct {
 
 func (x *MallBookTransferData) Reset() {
 	*x = MallBookTransferData{}
-	mi := &file_chess_trade_proto_msgTypes[42]
+	mi := &file_chess_trade_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3011,7 +3153,7 @@ func (x *MallBookTransferData) String() string {
 func (*MallBookTransferData) ProtoMessage() {}
 
 func (x *MallBookTransferData) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[42]
+	mi := &file_chess_trade_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3024,7 +3166,7 @@ func (x *MallBookTransferData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookTransferData.ProtoReflect.Descriptor instead.
 func (*MallBookTransferData) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{42}
+	return file_chess_trade_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *MallBookTransferData) GetResult() []*MallBookTransferInfo {
@@ -3046,7 +3188,7 @@ type MallBookTransferResp struct {
 
 func (x *MallBookTransferResp) Reset() {
 	*x = MallBookTransferResp{}
-	mi := &file_chess_trade_proto_msgTypes[43]
+	mi := &file_chess_trade_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3058,7 +3200,7 @@ func (x *MallBookTransferResp) String() string {
 func (*MallBookTransferResp) ProtoMessage() {}
 
 func (x *MallBookTransferResp) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[43]
+	mi := &file_chess_trade_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3071,7 +3213,7 @@ func (x *MallBookTransferResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookTransferResp.ProtoReflect.Descriptor instead.
 func (*MallBookTransferResp) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{43}
+	return file_chess_trade_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *MallBookTransferResp) GetCode() int32 {
@@ -3120,7 +3262,7 @@ type MallBookWithdrawReq struct {
 
 func (x *MallBookWithdrawReq) Reset() {
 	*x = MallBookWithdrawReq{}
-	mi := &file_chess_trade_proto_msgTypes[44]
+	mi := &file_chess_trade_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3132,7 +3274,7 @@ func (x *MallBookWithdrawReq) String() string {
 func (*MallBookWithdrawReq) ProtoMessage() {}
 
 func (x *MallBookWithdrawReq) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[44]
+	mi := &file_chess_trade_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3145,7 +3287,7 @@ func (x *MallBookWithdrawReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookWithdrawReq.ProtoReflect.Descriptor instead.
 func (*MallBookWithdrawReq) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{44}
+	return file_chess_trade_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *MallBookWithdrawReq) GetBizCode() string {
@@ -3218,7 +3360,7 @@ type MallBookWithdrawData struct {
 
 func (x *MallBookWithdrawData) Reset() {
 	*x = MallBookWithdrawData{}
-	mi := &file_chess_trade_proto_msgTypes[45]
+	mi := &file_chess_trade_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3230,7 +3372,7 @@ func (x *MallBookWithdrawData) String() string {
 func (*MallBookWithdrawData) ProtoMessage() {}
 
 func (x *MallBookWithdrawData) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[45]
+	mi := &file_chess_trade_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3243,7 +3385,7 @@ func (x *MallBookWithdrawData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookWithdrawData.ProtoReflect.Descriptor instead.
 func (*MallBookWithdrawData) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{45}
+	return file_chess_trade_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *MallBookWithdrawData) GetMerOrderId() string {
@@ -3278,7 +3420,7 @@ type MallBookWithdrawResp struct {
 
 func (x *MallBookWithdrawResp) Reset() {
 	*x = MallBookWithdrawResp{}
-	mi := &file_chess_trade_proto_msgTypes[46]
+	mi := &file_chess_trade_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3290,7 +3432,7 @@ func (x *MallBookWithdrawResp) String() string {
 func (*MallBookWithdrawResp) ProtoMessage() {}
 
 func (x *MallBookWithdrawResp) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[46]
+	mi := &file_chess_trade_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3303,7 +3445,7 @@ func (x *MallBookWithdrawResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookWithdrawResp.ProtoReflect.Descriptor instead.
 func (*MallBookWithdrawResp) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{46}
+	return file_chess_trade_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *MallBookWithdrawResp) GetCode() int32 {
@@ -3341,7 +3483,7 @@ type NcountAccount struct {
 
 func (x *NcountAccount) Reset() {
 	*x = NcountAccount{}
-	mi := &file_chess_trade_proto_msgTypes[47]
+	mi := &file_chess_trade_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3353,7 +3495,7 @@ func (x *NcountAccount) String() string {
 func (*NcountAccount) ProtoMessage() {}
 
 func (x *NcountAccount) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[47]
+	mi := &file_chess_trade_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3366,7 +3508,7 @@ func (x *NcountAccount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NcountAccount.ProtoReflect.Descriptor instead.
 func (*NcountAccount) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{47}
+	return file_chess_trade_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *NcountAccount) GetMainAccountId() string {
@@ -3427,7 +3569,7 @@ type NcountBankCard struct {
 
 func (x *NcountBankCard) Reset() {
 	*x = NcountBankCard{}
-	mi := &file_chess_trade_proto_msgTypes[48]
+	mi := &file_chess_trade_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3439,7 +3581,7 @@ func (x *NcountBankCard) String() string {
 func (*NcountBankCard) ProtoMessage() {}
 
 func (x *NcountBankCard) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[48]
+	mi := &file_chess_trade_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3452,7 +3594,7 @@ func (x *NcountBankCard) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NcountBankCard.ProtoReflect.Descriptor instead.
 func (*NcountBankCard) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{48}
+	return file_chess_trade_proto_rawDescGZIP(), []int{50}
 }
 
 func (x *NcountBankCard) GetBindCardAgrNo() string {
@@ -3526,7 +3668,7 @@ type MallBookCheckUserAccountInfoReq struct {
 
 func (x *MallBookCheckUserAccountInfoReq) Reset() {
 	*x = MallBookCheckUserAccountInfoReq{}
-	mi := &file_chess_trade_proto_msgTypes[49]
+	mi := &file_chess_trade_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3538,7 +3680,7 @@ func (x *MallBookCheckUserAccountInfoReq) String() string {
 func (*MallBookCheckUserAccountInfoReq) ProtoMessage() {}
 
 func (x *MallBookCheckUserAccountInfoReq) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[49]
+	mi := &file_chess_trade_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3551,7 +3693,7 @@ func (x *MallBookCheckUserAccountInfoReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookCheckUserAccountInfoReq.ProtoReflect.Descriptor instead.
 func (*MallBookCheckUserAccountInfoReq) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{49}
+	return file_chess_trade_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *MallBookCheckUserAccountInfoReq) GetUserId() uint64 {
@@ -3588,7 +3730,7 @@ type BankCardInfo struct {
 
 func (x *BankCardInfo) Reset() {
 	*x = BankCardInfo{}
-	mi := &file_chess_trade_proto_msgTypes[50]
+	mi := &file_chess_trade_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3600,7 +3742,7 @@ func (x *BankCardInfo) String() string {
 func (*BankCardInfo) ProtoMessage() {}
 
 func (x *BankCardInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[50]
+	mi := &file_chess_trade_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3613,7 +3755,7 @@ func (x *BankCardInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BankCardInfo.ProtoReflect.Descriptor instead.
 func (*BankCardInfo) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{50}
+	return file_chess_trade_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *BankCardInfo) GetMobile() string {
@@ -3662,7 +3804,7 @@ type CheckUserAccountInfoData struct {
 
 func (x *CheckUserAccountInfoData) Reset() {
 	*x = CheckUserAccountInfoData{}
-	mi := &file_chess_trade_proto_msgTypes[51]
+	mi := &file_chess_trade_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3674,7 +3816,7 @@ func (x *CheckUserAccountInfoData) String() string {
 func (*CheckUserAccountInfoData) ProtoMessage() {}
 
 func (x *CheckUserAccountInfoData) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[51]
+	mi := &file_chess_trade_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3687,7 +3829,7 @@ func (x *CheckUserAccountInfoData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckUserAccountInfoData.ProtoReflect.Descriptor instead.
 func (*CheckUserAccountInfoData) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{51}
+	return file_chess_trade_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *CheckUserAccountInfoData) GetAccountId() string {
@@ -3771,7 +3913,7 @@ type MallBookCheckUserAccountInfoResp struct {
 
 func (x *MallBookCheckUserAccountInfoResp) Reset() {
 	*x = MallBookCheckUserAccountInfoResp{}
-	mi := &file_chess_trade_proto_msgTypes[52]
+	mi := &file_chess_trade_proto_msgTypes[54]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3783,7 +3925,7 @@ func (x *MallBookCheckUserAccountInfoResp) String() string {
 func (*MallBookCheckUserAccountInfoResp) ProtoMessage() {}
 
 func (x *MallBookCheckUserAccountInfoResp) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[52]
+	mi := &file_chess_trade_proto_msgTypes[54]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3796,7 +3938,7 @@ func (x *MallBookCheckUserAccountInfoResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MallBookCheckUserAccountInfoResp.ProtoReflect.Descriptor instead.
 func (*MallBookCheckUserAccountInfoResp) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{52}
+	return file_chess_trade_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *MallBookCheckUserAccountInfoResp) GetCode() int32 {
@@ -3831,7 +3973,7 @@ type GetNcountAccountInfoReq struct {
 
 func (x *GetNcountAccountInfoReq) Reset() {
 	*x = GetNcountAccountInfoReq{}
-	mi := &file_chess_trade_proto_msgTypes[53]
+	mi := &file_chess_trade_proto_msgTypes[55]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3843,7 +3985,7 @@ func (x *GetNcountAccountInfoReq) String() string {
 func (*GetNcountAccountInfoReq) ProtoMessage() {}
 
 func (x *GetNcountAccountInfoReq) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[53]
+	mi := &file_chess_trade_proto_msgTypes[55]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3856,7 +3998,7 @@ func (x *GetNcountAccountInfoReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetNcountAccountInfoReq.ProtoReflect.Descriptor instead.
 func (*GetNcountAccountInfoReq) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{53}
+	return file_chess_trade_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *GetNcountAccountInfoReq) GetBizCode() string {
@@ -3882,7 +4024,7 @@ type NcountAccountInfoData struct {
 
 func (x *NcountAccountInfoData) Reset() {
 	*x = NcountAccountInfoData{}
-	mi := &file_chess_trade_proto_msgTypes[54]
+	mi := &file_chess_trade_proto_msgTypes[56]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3894,7 +4036,7 @@ func (x *NcountAccountInfoData) String() string {
 func (*NcountAccountInfoData) ProtoMessage() {}
 
 func (x *NcountAccountInfoData) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[54]
+	mi := &file_chess_trade_proto_msgTypes[56]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3907,7 +4049,7 @@ func (x *NcountAccountInfoData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NcountAccountInfoData.ProtoReflect.Descriptor instead.
 func (*NcountAccountInfoData) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{54}
+	return file_chess_trade_proto_rawDescGZIP(), []int{56}
 }
 
 func (x *NcountAccountInfoData) GetUserId() uint64 {
@@ -3977,7 +4119,7 @@ type GetNcountAccountInfoResp struct {
 
 func (x *GetNcountAccountInfoResp) Reset() {
 	*x = GetNcountAccountInfoResp{}
-	mi := &file_chess_trade_proto_msgTypes[55]
+	mi := &file_chess_trade_proto_msgTypes[57]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3989,7 +4131,7 @@ func (x *GetNcountAccountInfoResp) String() string {
 func (*GetNcountAccountInfoResp) ProtoMessage() {}
 
 func (x *GetNcountAccountInfoResp) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[55]
+	mi := &file_chess_trade_proto_msgTypes[57]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4002,7 +4144,7 @@ func (x *GetNcountAccountInfoResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetNcountAccountInfoResp.ProtoReflect.Descriptor instead.
 func (*GetNcountAccountInfoResp) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{55}
+	return file_chess_trade_proto_rawDescGZIP(), []int{57}
 }
 
 func (x *GetNcountAccountInfoResp) GetCode() int32 {
@@ -4039,7 +4181,7 @@ type SetPaymentSecretReq struct {
 
 func (x *SetPaymentSecretReq) Reset() {
 	*x = SetPaymentSecretReq{}
-	mi := &file_chess_trade_proto_msgTypes[56]
+	mi := &file_chess_trade_proto_msgTypes[58]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4051,7 +4193,7 @@ func (x *SetPaymentSecretReq) String() string {
 func (*SetPaymentSecretReq) ProtoMessage() {}
 
 func (x *SetPaymentSecretReq) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[56]
+	mi := &file_chess_trade_proto_msgTypes[58]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4064,7 +4206,7 @@ func (x *SetPaymentSecretReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetPaymentSecretReq.ProtoReflect.Descriptor instead.
 func (*SetPaymentSecretReq) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{56}
+	return file_chess_trade_proto_rawDescGZIP(), []int{58}
 }
 
 func (x *SetPaymentSecretReq) GetBizCode() string {
@@ -4091,7 +4233,7 @@ type SetPaymentSecretResp struct {
 
 func (x *SetPaymentSecretResp) Reset() {
 	*x = SetPaymentSecretResp{}
-	mi := &file_chess_trade_proto_msgTypes[57]
+	mi := &file_chess_trade_proto_msgTypes[59]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4103,7 +4245,7 @@ func (x *SetPaymentSecretResp) String() string {
 func (*SetPaymentSecretResp) ProtoMessage() {}
 
 func (x *SetPaymentSecretResp) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[57]
+	mi := &file_chess_trade_proto_msgTypes[59]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4116,7 +4258,7 @@ func (x *SetPaymentSecretResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetPaymentSecretResp.ProtoReflect.Descriptor instead.
 func (*SetPaymentSecretResp) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{57}
+	return file_chess_trade_proto_rawDescGZIP(), []int{59}
 }
 
 func (x *SetPaymentSecretResp) GetCode() int32 {
@@ -4146,7 +4288,7 @@ type GetOpenIDByCodeReq struct {
 
 func (x *GetOpenIDByCodeReq) Reset() {
 	*x = GetOpenIDByCodeReq{}
-	mi := &file_chess_trade_proto_msgTypes[58]
+	mi := &file_chess_trade_proto_msgTypes[60]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4158,7 +4300,7 @@ func (x *GetOpenIDByCodeReq) String() string {
 func (*GetOpenIDByCodeReq) ProtoMessage() {}
 
 func (x *GetOpenIDByCodeReq) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[58]
+	mi := &file_chess_trade_proto_msgTypes[60]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4171,7 +4313,7 @@ func (x *GetOpenIDByCodeReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOpenIDByCodeReq.ProtoReflect.Descriptor instead.
 func (*GetOpenIDByCodeReq) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{58}
+	return file_chess_trade_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *GetOpenIDByCodeReq) GetCode() string {
@@ -4199,7 +4341,7 @@ type GetOpenIDByCodeData struct {
 
 func (x *GetOpenIDByCodeData) Reset() {
 	*x = GetOpenIDByCodeData{}
-	mi := &file_chess_trade_proto_msgTypes[59]
+	mi := &file_chess_trade_proto_msgTypes[61]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4211,7 +4353,7 @@ func (x *GetOpenIDByCodeData) String() string {
 func (*GetOpenIDByCodeData) ProtoMessage() {}
 
 func (x *GetOpenIDByCodeData) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[59]
+	mi := &file_chess_trade_proto_msgTypes[61]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4224,7 +4366,7 @@ func (x *GetOpenIDByCodeData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOpenIDByCodeData.ProtoReflect.Descriptor instead.
 func (*GetOpenIDByCodeData) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{59}
+	return file_chess_trade_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *GetOpenIDByCodeData) GetOpenid() string {
@@ -4259,7 +4401,7 @@ type GetOpenIDByCodeResp struct {
 
 func (x *GetOpenIDByCodeResp) Reset() {
 	*x = GetOpenIDByCodeResp{}
-	mi := &file_chess_trade_proto_msgTypes[60]
+	mi := &file_chess_trade_proto_msgTypes[62]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4271,7 +4413,7 @@ func (x *GetOpenIDByCodeResp) String() string {
 func (*GetOpenIDByCodeResp) ProtoMessage() {}
 
 func (x *GetOpenIDByCodeResp) ProtoReflect() protoreflect.Message {
-	mi := &file_chess_trade_proto_msgTypes[60]
+	mi := &file_chess_trade_proto_msgTypes[62]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4284,7 +4426,7 @@ func (x *GetOpenIDByCodeResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOpenIDByCodeResp.ProtoReflect.Descriptor instead.
 func (*GetOpenIDByCodeResp) Descriptor() ([]byte, []int) {
-	return file_chess_trade_proto_rawDescGZIP(), []int{60}
+	return file_chess_trade_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *GetOpenIDByCodeResp) GetCode() int32 {
@@ -4601,7 +4743,7 @@ var file_chess_trade_proto_rawDesc = []byte{
 	0x61, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68,
 	0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x4e, 0x65, 0x77, 0x53,
 	0x65, 0x6c, 0x66, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04,
-	0x64, 0x61, 0x74, 0x61, 0x22, 0xe4, 0x01, 0x0a, 0x17, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f,
+	0x64, 0x61, 0x74, 0x61, 0x22, 0xcd, 0x02, 0x0a, 0x17, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f,
 	0x6b, 0x42, 0x69, 0x6e, 0x64, 0x42, 0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65, 0x71,
 	0x12, 0x21, 0x0a, 0x08, 0x62, 0x69, 0x7a, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x09, 0x42, 0x06, 0xba, 0x48, 0x03, 0xc8, 0x01, 0x01, 0x52, 0x07, 0x62, 0x69, 0x7a, 0x43,
@@ -4613,19 +4755,39 @@ var file_chess_trade_proto_rawDesc = []byte{
 	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x42, 0x06, 0xba, 0x48, 0x03, 0xc8,
 	0x01, 0x01, 0x52, 0x0a, 0x68, 0x6f, 0x6c, 0x64, 0x65, 0x72, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x1e,
 	0x0a, 0x06, 0x6d, 0x6f, 0x62, 0x69, 0x6c, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x42, 0x06,
-	0xba, 0x48, 0x03, 0xc8, 0x01, 0x01, 0x52, 0x06, 0x6d, 0x6f, 0x62, 0x69, 0x6c, 0x65, 0x12, 0x1b,
-	0x0a, 0x09, 0x62, 0x61, 0x6e, 0x6b, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x08, 0x62, 0x61, 0x6e, 0x6b, 0x43, 0x6f, 0x64, 0x65, 0x22, 0x40, 0x0a, 0x18, 0x4d,
-	0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x42, 0x69, 0x6e, 0x64, 0x42, 0x61, 0x6e, 0x6b, 0x43,
-	0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x6d,
-	0x73, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6d, 0x73, 0x67, 0x22, 0x5f, 0x0a,
-	0x19, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x55, 0x6e, 0x62, 0x69, 0x6e, 0x64, 0x42,
-	0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65, 0x71, 0x12, 0x21, 0x0a, 0x08, 0x62, 0x69,
-	0x7a, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x06, 0xba, 0x48,
-	0x03, 0xc8, 0x01, 0x01, 0x52, 0x07, 0x62, 0x69, 0x7a, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x1f, 0x0a,
-	0x07, 0x70, 0x6d, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x06,
-	0xba, 0x48, 0x03, 0xc8, 0x01, 0x01, 0x52, 0x06, 0x70, 0x6d, 0x43, 0x6f, 0x64, 0x65, 0x22, 0x42,
+	0xba, 0x48, 0x03, 0xc8, 0x01, 0x01, 0x52, 0x06, 0x6d, 0x6f, 0x62, 0x69, 0x6c, 0x65, 0x12, 0x2c,
+	0x0a, 0x0e, 0x62, 0x69, 0x6e, 0x64, 0x5f, 0x63, 0x61, 0x72, 0x64, 0x5f, 0x74, 0x79, 0x70, 0x65,
+	0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x06, 0xba, 0x48, 0x03, 0xc8, 0x01, 0x01, 0x52, 0x0c,
+	0x62, 0x69, 0x6e, 0x64, 0x43, 0x61, 0x72, 0x64, 0x54, 0x79, 0x70, 0x65, 0x12, 0x1b, 0x0a, 0x09,
+	0x62, 0x61, 0x6e, 0x6b, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x08, 0x62, 0x61, 0x6e, 0x6b, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x76, 0x69, 0x70,
+	0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x76, 0x69, 0x70,
+	0x43, 0x6f, 0x64, 0x65, 0x12, 0x1e, 0x0a, 0x0a, 0x65, 0x78, 0x70, 0x69, 0x72, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x18, 0x09, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x65, 0x78, 0x70, 0x69, 0x72, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x22, 0x40, 0x0a, 0x18, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b,
+	0x42, 0x69, 0x6e, 0x64, 0x42, 0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70,
+	0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04,
+	0x63, 0x6f, 0x64, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x6d, 0x73, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x03, 0x6d, 0x73, 0x67, 0x22, 0x5d, 0x0a, 0x1e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f,
+	0x6f, 0x6b, 0x42, 0x69, 0x6e, 0x64, 0x42, 0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x43, 0x6f,
+	0x6e, 0x66, 0x69, 0x72, 0x6d, 0x52, 0x65, 0x71, 0x12, 0x20, 0x0a, 0x0c, 0x62, 0x61, 0x6e, 0x6b,
+	0x5f, 0x63, 0x61, 0x72, 0x64, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0a,
+	0x62, 0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x49, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x73, 0x6d,
+	0x73, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x6d,
+	0x73, 0x43, 0x6f, 0x64, 0x65, 0x22, 0x47, 0x0a, 0x1f, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f,
+	0x6b, 0x42, 0x69, 0x6e, 0x64, 0x42, 0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x43, 0x6f, 0x6e,
+	0x66, 0x69, 0x72, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x12, 0x10, 0x0a, 0x03,
+	0x6d, 0x73, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6d, 0x73, 0x67, 0x22, 0x8d,
+	0x01, 0x0a, 0x19, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x55, 0x6e, 0x62, 0x69, 0x6e,
+	0x64, 0x42, 0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65, 0x71, 0x12, 0x21, 0x0a, 0x08,
+	0x62, 0x69, 0x7a, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x06,
+	0xba, 0x48, 0x03, 0xc8, 0x01, 0x01, 0x52, 0x07, 0x62, 0x69, 0x7a, 0x43, 0x6f, 0x64, 0x65, 0x12,
+	0x1f, 0x0a, 0x07, 0x70, 0x6d, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x06, 0xba, 0x48, 0x03, 0xc8, 0x01, 0x01, 0x52, 0x06, 0x70, 0x6d, 0x43, 0x6f, 0x64, 0x65,
+	0x12, 0x2c, 0x0a, 0x0e, 0x62, 0x69, 0x6e, 0x64, 0x5f, 0x63, 0x61, 0x72, 0x64, 0x5f, 0x74, 0x79,
+	0x70, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x06, 0xba, 0x48, 0x03, 0xc8, 0x01, 0x01,
+	0x52, 0x0c, 0x62, 0x69, 0x6e, 0x64, 0x43, 0x61, 0x72, 0x64, 0x54, 0x79, 0x70, 0x65, 0x22, 0x42,
 	0x0a, 0x1a, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x55, 0x6e, 0x62, 0x69, 0x6e, 0x64,
 	0x42, 0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x12, 0x12, 0x0a, 0x04,
 	0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x63, 0x6f, 0x64, 0x65,
@@ -4870,7 +5032,7 @@ var file_chess_trade_proto_rawDesc = []byte{
 	0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x6e,
 	0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x4f, 0x70, 0x65, 0x6e,
 	0x49, 0x44, 0x42, 0x79, 0x43, 0x6f, 0x64, 0x65, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04, 0x64, 0x61,
-	0x74, 0x61, 0x32, 0xda, 0x10, 0x0a, 0x05, 0x54, 0x72, 0x61, 0x64, 0x65, 0x12, 0x3c, 0x0a, 0x09,
+	0x74, 0x61, 0x32, 0xd0, 0x11, 0x0a, 0x05, 0x54, 0x72, 0x61, 0x64, 0x65, 0x12, 0x3c, 0x0a, 0x09,
 	0x68, 0x35, 0x50, 0x72, 0x65, 0x70, 0x61, 0x69, 0x64, 0x12, 0x15, 0x2e, 0x6e, 0x65, 0x77, 0x5f,
 	0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x50, 0x72, 0x65, 0x70, 0x61, 0x69, 0x64, 0x52, 0x65, 0x71,
 	0x1a, 0x18, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x48, 0x35, 0x50,
@@ -4957,56 +5119,63 @@ var file_chess_trade_proto_rawDesc = []byte{
 	0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x42, 0x69, 0x6e, 0x64, 0x42, 0x61, 0x6e, 0x6b, 0x43,
 	0x61, 0x72, 0x64, 0x52, 0x65, 0x71, 0x1a, 0x23, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65,
 	0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x42, 0x69, 0x6e, 0x64, 0x42,
-	0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x12, 0x65, 0x0a, 0x16, 0x6d,
-	0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x55, 0x6e, 0x62, 0x69, 0x6e, 0x64, 0x42, 0x61, 0x6e,
-	0x6b, 0x43, 0x61, 0x72, 0x64, 0x12, 0x24, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73,
-	0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x55, 0x6e, 0x62, 0x69, 0x6e, 0x64,
-	0x42, 0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65, 0x71, 0x1a, 0x25, 0x2e, 0x6e, 0x65,
+	0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x12, 0x74, 0x0a, 0x1b, 0x6d,
+	0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x42, 0x69, 0x6e, 0x64, 0x42, 0x61, 0x6e, 0x6b, 0x43,
+	0x61, 0x72, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x12, 0x29, 0x2e, 0x6e, 0x65, 0x77,
+	0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x42,
+	0x69, 0x6e, 0x64, 0x42, 0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69,
+	0x72, 0x6d, 0x52, 0x65, 0x71, 0x1a, 0x2a, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73,
+	0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x42, 0x69, 0x6e, 0x64, 0x42, 0x61,
+	0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x52, 0x65, 0x73,
+	0x70, 0x12, 0x65, 0x0a, 0x16, 0x6d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x55, 0x6e, 0x62,
+	0x69, 0x6e, 0x64, 0x42, 0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x12, 0x24, 0x2e, 0x6e, 0x65,
 	0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b,
 	0x55, 0x6e, 0x62, 0x69, 0x6e, 0x64, 0x42, 0x61, 0x6e, 0x6b, 0x43, 0x61, 0x72, 0x64, 0x52, 0x65,
-	0x73, 0x70, 0x12, 0x50, 0x0a, 0x0f, 0x6d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x44, 0x65,
-	0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x1d, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73,
-	0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69,
-	0x74, 0x52, 0x65, 0x71, 0x1a, 0x1e, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73,
-	0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
-	0x52, 0x65, 0x73, 0x70, 0x12, 0x53, 0x0a, 0x10, 0x6d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b,
-	0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x12, 0x1e, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63,
-	0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x54, 0x72, 0x61,
-	0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65, 0x71, 0x1a, 0x1f, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63,
-	0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x54, 0x72, 0x61,
-	0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x12, 0x53, 0x0a, 0x10, 0x6d, 0x61, 0x6c,
-	0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x12, 0x1e, 0x2e,
-	0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f,
-	0x6f, 0x6b, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x71, 0x1a, 0x1f, 0x2e,
-	0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f,
-	0x6f, 0x6b, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x52, 0x65, 0x73, 0x70, 0x12, 0x77,
-	0x0a, 0x1c, 0x6d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x55,
-	0x73, 0x65, 0x72, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x2a,
+	0x71, 0x1a, 0x25, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61,
+	0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x55, 0x6e, 0x62, 0x69, 0x6e, 0x64, 0x42, 0x61, 0x6e, 0x6b,
+	0x43, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x12, 0x50, 0x0a, 0x0f, 0x6d, 0x61, 0x6c, 0x6c,
+	0x42, 0x6f, 0x6f, 0x6b, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x1d, 0x2e, 0x6e, 0x65,
+	0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b,
+	0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x1e, 0x2e, 0x6e, 0x65, 0x77,
+	0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x44,
+	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x73, 0x70, 0x12, 0x53, 0x0a, 0x10, 0x6d, 0x61,
+	0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x12, 0x1e,
 	0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42,
-	0x6f, 0x6f, 0x6b, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x55, 0x73, 0x65, 0x72, 0x41, 0x63, 0x63, 0x6f,
-	0x75, 0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x1a, 0x2b, 0x2e, 0x6e, 0x65, 0x77,
-	0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x43,
-	0x68, 0x65, 0x63, 0x6b, 0x55, 0x73, 0x65, 0x72, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49,
-	0x6e, 0x66, 0x6f, 0x52, 0x65, 0x73, 0x70, 0x12, 0x5f, 0x0a, 0x14, 0x67, 0x65, 0x74, 0x4e, 0x63,
-	0x6f, 0x75, 0x6e, 0x74, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12,
-	0x22, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x4e,
-	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f,
-	0x52, 0x65, 0x71, 0x1a, 0x23, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e,
-	0x47, 0x65, 0x74, 0x4e, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74,
-	0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x73, 0x70, 0x12, 0x53, 0x0a, 0x10, 0x73, 0x65, 0x74, 0x50,
-	0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x12, 0x1e, 0x2e, 0x6e,
-	0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x53, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d,
-	0x65, 0x6e, 0x74, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x1f, 0x2e, 0x6e,
-	0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x53, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d,
-	0x65, 0x6e, 0x74, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x12, 0x50, 0x0a,
-	0x0f, 0x67, 0x65, 0x74, 0x4f, 0x70, 0x65, 0x6e, 0x49, 0x44, 0x42, 0x79, 0x43, 0x6f, 0x64, 0x65,
-	0x12, 0x1d, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x47, 0x65, 0x74,
-	0x4f, 0x70, 0x65, 0x6e, 0x49, 0x44, 0x42, 0x79, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x71, 0x1a,
-	0x1e, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x4f,
-	0x70, 0x65, 0x6e, 0x49, 0x44, 0x42, 0x79, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x42,
-	0x1b, 0x5a, 0x19, 0x6e, 0x65, 0x77, 0x2d, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2f, 0x70, 0x6b, 0x67,
-	0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74, 0x72, 0x61, 0x64, 0x65, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x6f, 0x6b, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65, 0x71, 0x1a, 0x1f,
+	0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42,
+	0x6f, 0x6f, 0x6b, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x12,
+	0x53, 0x0a, 0x10, 0x6d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x57, 0x69, 0x74, 0x68, 0x64,
+	0x72, 0x61, 0x77, 0x12, 0x1e, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e,
+	0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77,
+	0x52, 0x65, 0x71, 0x1a, 0x1f, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e,
+	0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77,
+	0x52, 0x65, 0x73, 0x70, 0x12, 0x77, 0x0a, 0x1c, 0x6d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b,
+	0x43, 0x68, 0x65, 0x63, 0x6b, 0x55, 0x73, 0x65, 0x72, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74,
+	0x49, 0x6e, 0x66, 0x6f, 0x12, 0x2a, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73,
+	0x2e, 0x4d, 0x61, 0x6c, 0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x55, 0x73,
+	0x65, 0x72, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71,
+	0x1a, 0x2b, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x4d, 0x61, 0x6c,
+	0x6c, 0x42, 0x6f, 0x6f, 0x6b, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x55, 0x73, 0x65, 0x72, 0x41, 0x63,
+	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x73, 0x70, 0x12, 0x5f, 0x0a,
+	0x14, 0x67, 0x65, 0x74, 0x4e, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e,
+	0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x22, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73,
+	0x73, 0x2e, 0x47, 0x65, 0x74, 0x4e, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x41, 0x63, 0x63, 0x6f, 0x75,
+	0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x1a, 0x23, 0x2e, 0x6e, 0x65, 0x77, 0x5f,
+	0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x4e, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x41,
+	0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x73, 0x70, 0x12, 0x53,
+	0x0a, 0x10, 0x73, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x63, 0x72,
+	0x65, 0x74, 0x12, 0x1e, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x53,
+	0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x52,
+	0x65, 0x71, 0x1a, 0x1f, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73, 0x73, 0x2e, 0x53,
+	0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x52,
+	0x65, 0x73, 0x70, 0x12, 0x50, 0x0a, 0x0f, 0x67, 0x65, 0x74, 0x4f, 0x70, 0x65, 0x6e, 0x49, 0x44,
+	0x42, 0x79, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x1d, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65,
+	0x73, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x4f, 0x70, 0x65, 0x6e, 0x49, 0x44, 0x42, 0x79, 0x43, 0x6f,
+	0x64, 0x65, 0x52, 0x65, 0x71, 0x1a, 0x1e, 0x2e, 0x6e, 0x65, 0x77, 0x5f, 0x63, 0x68, 0x65, 0x73,
+	0x73, 0x2e, 0x47, 0x65, 0x74, 0x4f, 0x70, 0x65, 0x6e, 0x49, 0x44, 0x42, 0x79, 0x43, 0x6f, 0x64,
+	0x65, 0x52, 0x65, 0x73, 0x70, 0x42, 0x1b, 0x5a, 0x19, 0x6e, 0x65, 0x77, 0x2d, 0x63, 0x68, 0x65,
+	0x73, 0x73, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74, 0x72, 0x61,
+	0x64, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -5021,7 +5190,7 @@ func file_chess_trade_proto_rawDescGZIP() []byte {
 	return file_chess_trade_proto_rawDescData
 }
 
-var file_chess_trade_proto_msgTypes = make([]protoimpl.MessageInfo, 61)
+var file_chess_trade_proto_msgTypes = make([]protoimpl.MessageInfo, 63)
 var file_chess_trade_proto_goTypes = []any{
 	(*PrepaidReq)(nil),                       // 0: new_chess.PrepaidReq
 	(*JsapiRepaidReq)(nil),                   // 1: new_chess.JsapiRepaidReq
@@ -5059,31 +5228,33 @@ var file_chess_trade_proto_goTypes = []any{
 	(*MallBookNewSelfAccountResp)(nil),       // 33: new_chess.MallBookNewSelfAccountResp
 	(*MallBookBindBankCardReq)(nil),          // 34: new_chess.MallBookBindBankCardReq
 	(*MallBookBindBankCardResp)(nil),         // 35: new_chess.MallBookBindBankCardResp
-	(*MallBookUnbindBankCardReq)(nil),        // 36: new_chess.MallBookUnbindBankCardReq
-	(*MallBookUnbindBankCardResp)(nil),       // 37: new_chess.MallBookUnbindBankCardResp
-	(*MallBookDepositReq)(nil),               // 38: new_chess.MallBookDepositReq
-	(*MallBookDepositResp)(nil),              // 39: new_chess.MallBookDepositResp
-	(*MallBookTransferReq)(nil),              // 40: new_chess.MallBookTransferReq
-	(*MallBookTransferInfo)(nil),             // 41: new_chess.MallBookTransferInfo
-	(*MallBookTransferData)(nil),             // 42: new_chess.MallBookTransferData
-	(*MallBookTransferResp)(nil),             // 43: new_chess.MallBookTransferResp
-	(*MallBookWithdrawReq)(nil),              // 44: new_chess.MallBookWithdrawReq
-	(*MallBookWithdrawData)(nil),             // 45: new_chess.MallBookWithdrawData
-	(*MallBookWithdrawResp)(nil),             // 46: new_chess.MallBookWithdrawResp
-	(*NcountAccount)(nil),                    // 47: new_chess.NcountAccount
-	(*NcountBankCard)(nil),                   // 48: new_chess.NcountBankCard
-	(*MallBookCheckUserAccountInfoReq)(nil),  // 49: new_chess.MallBookCheckUserAccountInfoReq
-	(*BankCardInfo)(nil),                     // 50: new_chess.BankCardInfo
-	(*CheckUserAccountInfoData)(nil),         // 51: new_chess.CheckUserAccountInfoData
-	(*MallBookCheckUserAccountInfoResp)(nil), // 52: new_chess.MallBookCheckUserAccountInfoResp
-	(*GetNcountAccountInfoReq)(nil),          // 53: new_chess.GetNcountAccountInfoReq
-	(*NcountAccountInfoData)(nil),            // 54: new_chess.NcountAccountInfoData
-	(*GetNcountAccountInfoResp)(nil),         // 55: new_chess.GetNcountAccountInfoResp
-	(*SetPaymentSecretReq)(nil),              // 56: new_chess.SetPaymentSecretReq
-	(*SetPaymentSecretResp)(nil),             // 57: new_chess.SetPaymentSecretResp
-	(*GetOpenIDByCodeReq)(nil),               // 58: new_chess.GetOpenIDByCodeReq
-	(*GetOpenIDByCodeData)(nil),              // 59: new_chess.GetOpenIDByCodeData
-	(*GetOpenIDByCodeResp)(nil),              // 60: new_chess.GetOpenIDByCodeResp
+	(*MallBookBindBankCardConfirmReq)(nil),   // 36: new_chess.MallBookBindBankCardConfirmReq
+	(*MallBookBindBankCardConfirmResp)(nil),  // 37: new_chess.MallBookBindBankCardConfirmResp
+	(*MallBookUnbindBankCardReq)(nil),        // 38: new_chess.MallBookUnbindBankCardReq
+	(*MallBookUnbindBankCardResp)(nil),       // 39: new_chess.MallBookUnbindBankCardResp
+	(*MallBookDepositReq)(nil),               // 40: new_chess.MallBookDepositReq
+	(*MallBookDepositResp)(nil),              // 41: new_chess.MallBookDepositResp
+	(*MallBookTransferReq)(nil),              // 42: new_chess.MallBookTransferReq
+	(*MallBookTransferInfo)(nil),             // 43: new_chess.MallBookTransferInfo
+	(*MallBookTransferData)(nil),             // 44: new_chess.MallBookTransferData
+	(*MallBookTransferResp)(nil),             // 45: new_chess.MallBookTransferResp
+	(*MallBookWithdrawReq)(nil),              // 46: new_chess.MallBookWithdrawReq
+	(*MallBookWithdrawData)(nil),             // 47: new_chess.MallBookWithdrawData
+	(*MallBookWithdrawResp)(nil),             // 48: new_chess.MallBookWithdrawResp
+	(*NcountAccount)(nil),                    // 49: new_chess.NcountAccount
+	(*NcountBankCard)(nil),                   // 50: new_chess.NcountBankCard
+	(*MallBookCheckUserAccountInfoReq)(nil),  // 51: new_chess.MallBookCheckUserAccountInfoReq
+	(*BankCardInfo)(nil),                     // 52: new_chess.BankCardInfo
+	(*CheckUserAccountInfoData)(nil),         // 53: new_chess.CheckUserAccountInfoData
+	(*MallBookCheckUserAccountInfoResp)(nil), // 54: new_chess.MallBookCheckUserAccountInfoResp
+	(*GetNcountAccountInfoReq)(nil),          // 55: new_chess.GetNcountAccountInfoReq
+	(*NcountAccountInfoData)(nil),            // 56: new_chess.NcountAccountInfoData
+	(*GetNcountAccountInfoResp)(nil),         // 57: new_chess.GetNcountAccountInfoResp
+	(*SetPaymentSecretReq)(nil),              // 58: new_chess.SetPaymentSecretReq
+	(*SetPaymentSecretResp)(nil),             // 59: new_chess.SetPaymentSecretResp
+	(*GetOpenIDByCodeReq)(nil),               // 60: new_chess.GetOpenIDByCodeReq
+	(*GetOpenIDByCodeData)(nil),              // 61: new_chess.GetOpenIDByCodeData
+	(*GetOpenIDByCodeResp)(nil),              // 62: new_chess.GetOpenIDByCodeResp
 }
 var file_chess_trade_proto_depIdxs = []int32{
 	5,  // 0: new_chess.QueryOrderResp.order_info:type_name -> new_chess.OrderInfo
@@ -5094,13 +5265,13 @@ var file_chess_trade_proto_depIdxs = []int32{
 	26, // 5: new_chess.GetExtractLogsResp.data:type_name -> new_chess.ExtractLogsData
 	29, // 6: new_chess.CheckUserExtractRiskResp.data:type_name -> new_chess.CheckUserExtractRiskData
 	32, // 7: new_chess.MallBookNewSelfAccountResp.data:type_name -> new_chess.MallBookNewSelfAccountData
-	41, // 8: new_chess.MallBookTransferData.result:type_name -> new_chess.MallBookTransferInfo
-	42, // 9: new_chess.MallBookTransferResp.data:type_name -> new_chess.MallBookTransferData
-	45, // 10: new_chess.MallBookWithdrawResp.data:type_name -> new_chess.MallBookWithdrawData
-	50, // 11: new_chess.CheckUserAccountInfoData.bank_card_info:type_name -> new_chess.BankCardInfo
-	51, // 12: new_chess.MallBookCheckUserAccountInfoResp.data:type_name -> new_chess.CheckUserAccountInfoData
-	54, // 13: new_chess.GetNcountAccountInfoResp.data:type_name -> new_chess.NcountAccountInfoData
-	59, // 14: new_chess.GetOpenIDByCodeResp.data:type_name -> new_chess.GetOpenIDByCodeData
+	43, // 8: new_chess.MallBookTransferData.result:type_name -> new_chess.MallBookTransferInfo
+	44, // 9: new_chess.MallBookTransferResp.data:type_name -> new_chess.MallBookTransferData
+	47, // 10: new_chess.MallBookWithdrawResp.data:type_name -> new_chess.MallBookWithdrawData
+	52, // 11: new_chess.CheckUserAccountInfoData.bank_card_info:type_name -> new_chess.BankCardInfo
+	53, // 12: new_chess.MallBookCheckUserAccountInfoResp.data:type_name -> new_chess.CheckUserAccountInfoData
+	56, // 13: new_chess.GetNcountAccountInfoResp.data:type_name -> new_chess.NcountAccountInfoData
+	61, // 14: new_chess.GetOpenIDByCodeResp.data:type_name -> new_chess.GetOpenIDByCodeData
 	0,  // 15: new_chess.Trade.h5Prepaid:input_type -> new_chess.PrepaidReq
 	0,  // 16: new_chess.Trade.AppPrepaid:input_type -> new_chess.PrepaidReq
 	0,  // 17: new_chess.Trade.jsapiPrepaid:input_type -> new_chess.PrepaidReq
@@ -5118,41 +5289,43 @@ var file_chess_trade_proto_depIdxs = []int32{
 	28, // 29: new_chess.Trade.checkUserExtractRisk:input_type -> new_chess.CheckUserExtractRiskReq
 	31, // 30: new_chess.Trade.mallBookNewSelfAccount:input_type -> new_chess.MallBookNewSelfAccountReq
 	34, // 31: new_chess.Trade.mallBookBindBankCard:input_type -> new_chess.MallBookBindBankCardReq
-	36, // 32: new_chess.Trade.mallBookUnbindBankCard:input_type -> new_chess.MallBookUnbindBankCardReq
-	38, // 33: new_chess.Trade.mallBookDeposit:input_type -> new_chess.MallBookDepositReq
-	40, // 34: new_chess.Trade.mallBookTransfer:input_type -> new_chess.MallBookTransferReq
-	44, // 35: new_chess.Trade.mallBookWithdraw:input_type -> new_chess.MallBookWithdrawReq
-	49, // 36: new_chess.Trade.mallBookCheckUserAccountInfo:input_type -> new_chess.MallBookCheckUserAccountInfoReq
-	53, // 37: new_chess.Trade.getNcountAccountInfo:input_type -> new_chess.GetNcountAccountInfoReq
-	56, // 38: new_chess.Trade.setPaymentSecret:input_type -> new_chess.SetPaymentSecretReq
-	58, // 39: new_chess.Trade.getOpenIDByCode:input_type -> new_chess.GetOpenIDByCodeReq
-	2,  // 40: new_chess.Trade.h5Prepaid:output_type -> new_chess.H5PrepaidResp
-	11, // 41: new_chess.Trade.AppPrepaid:output_type -> new_chess.AppPrepaidResp
-	3,  // 42: new_chess.Trade.jsapiPrepaid:output_type -> new_chess.JsapiPrepaidResp
-	3,  // 43: new_chess.Trade.jsapiRepaid:output_type -> new_chess.JsapiPrepaidResp
-	6,  // 44: new_chess.Trade.queryOrder:output_type -> new_chess.QueryOrderResp
-	8,  // 45: new_chess.Trade.cancelOrder:output_type -> new_chess.CancelOrderResp
-	10, // 46: new_chess.Trade.refundOrder:output_type -> new_chess.RefundOrderResp
-	13, // 47: new_chess.Trade.withdrawBankCard:output_type -> new_chess.WithdrawBankCardResp
-	15, // 48: new_chess.Trade.queryExtractOrder:output_type -> new_chess.QueryExtractOrderResp
-	17, // 49: new_chess.Trade.saveExtractConfig:output_type -> new_chess.SaveExtractConfigResp
-	21, // 50: new_chess.Trade.getExtractConfig:output_type -> new_chess.GetExtractConfigResp
-	19, // 51: new_chess.Trade.saveExtractUserConfig:output_type -> new_chess.SaveExtractUserConfigResp
-	23, // 52: new_chess.Trade.getExtractUserConfig:output_type -> new_chess.GetExtractUserConfigResp
-	27, // 53: new_chess.Trade.getExtractLogs:output_type -> new_chess.GetExtractLogsResp
-	30, // 54: new_chess.Trade.checkUserExtractRisk:output_type -> new_chess.CheckUserExtractRiskResp
-	33, // 55: new_chess.Trade.mallBookNewSelfAccount:output_type -> new_chess.MallBookNewSelfAccountResp
-	35, // 56: new_chess.Trade.mallBookBindBankCard:output_type -> new_chess.MallBookBindBankCardResp
-	37, // 57: new_chess.Trade.mallBookUnbindBankCard:output_type -> new_chess.MallBookUnbindBankCardResp
-	39, // 58: new_chess.Trade.mallBookDeposit:output_type -> new_chess.MallBookDepositResp
-	43, // 59: new_chess.Trade.mallBookTransfer:output_type -> new_chess.MallBookTransferResp
-	46, // 60: new_chess.Trade.mallBookWithdraw:output_type -> new_chess.MallBookWithdrawResp
-	52, // 61: new_chess.Trade.mallBookCheckUserAccountInfo:output_type -> new_chess.MallBookCheckUserAccountInfoResp
-	55, // 62: new_chess.Trade.getNcountAccountInfo:output_type -> new_chess.GetNcountAccountInfoResp
-	57, // 63: new_chess.Trade.setPaymentSecret:output_type -> new_chess.SetPaymentSecretResp
-	60, // 64: new_chess.Trade.getOpenIDByCode:output_type -> new_chess.GetOpenIDByCodeResp
-	40, // [40:65] is the sub-list for method output_type
-	15, // [15:40] is the sub-list for method input_type
+	36, // 32: new_chess.Trade.mallBookBindBankCardConfirm:input_type -> new_chess.MallBookBindBankCardConfirmReq
+	38, // 33: new_chess.Trade.mallBookUnbindBankCard:input_type -> new_chess.MallBookUnbindBankCardReq
+	40, // 34: new_chess.Trade.mallBookDeposit:input_type -> new_chess.MallBookDepositReq
+	42, // 35: new_chess.Trade.mallBookTransfer:input_type -> new_chess.MallBookTransferReq
+	46, // 36: new_chess.Trade.mallBookWithdraw:input_type -> new_chess.MallBookWithdrawReq
+	51, // 37: new_chess.Trade.mallBookCheckUserAccountInfo:input_type -> new_chess.MallBookCheckUserAccountInfoReq
+	55, // 38: new_chess.Trade.getNcountAccountInfo:input_type -> new_chess.GetNcountAccountInfoReq
+	58, // 39: new_chess.Trade.setPaymentSecret:input_type -> new_chess.SetPaymentSecretReq
+	60, // 40: new_chess.Trade.getOpenIDByCode:input_type -> new_chess.GetOpenIDByCodeReq
+	2,  // 41: new_chess.Trade.h5Prepaid:output_type -> new_chess.H5PrepaidResp
+	11, // 42: new_chess.Trade.AppPrepaid:output_type -> new_chess.AppPrepaidResp
+	3,  // 43: new_chess.Trade.jsapiPrepaid:output_type -> new_chess.JsapiPrepaidResp
+	3,  // 44: new_chess.Trade.jsapiRepaid:output_type -> new_chess.JsapiPrepaidResp
+	6,  // 45: new_chess.Trade.queryOrder:output_type -> new_chess.QueryOrderResp
+	8,  // 46: new_chess.Trade.cancelOrder:output_type -> new_chess.CancelOrderResp
+	10, // 47: new_chess.Trade.refundOrder:output_type -> new_chess.RefundOrderResp
+	13, // 48: new_chess.Trade.withdrawBankCard:output_type -> new_chess.WithdrawBankCardResp
+	15, // 49: new_chess.Trade.queryExtractOrder:output_type -> new_chess.QueryExtractOrderResp
+	17, // 50: new_chess.Trade.saveExtractConfig:output_type -> new_chess.SaveExtractConfigResp
+	21, // 51: new_chess.Trade.getExtractConfig:output_type -> new_chess.GetExtractConfigResp
+	19, // 52: new_chess.Trade.saveExtractUserConfig:output_type -> new_chess.SaveExtractUserConfigResp
+	23, // 53: new_chess.Trade.getExtractUserConfig:output_type -> new_chess.GetExtractUserConfigResp
+	27, // 54: new_chess.Trade.getExtractLogs:output_type -> new_chess.GetExtractLogsResp
+	30, // 55: new_chess.Trade.checkUserExtractRisk:output_type -> new_chess.CheckUserExtractRiskResp
+	33, // 56: new_chess.Trade.mallBookNewSelfAccount:output_type -> new_chess.MallBookNewSelfAccountResp
+	35, // 57: new_chess.Trade.mallBookBindBankCard:output_type -> new_chess.MallBookBindBankCardResp
+	37, // 58: new_chess.Trade.mallBookBindBankCardConfirm:output_type -> new_chess.MallBookBindBankCardConfirmResp
+	39, // 59: new_chess.Trade.mallBookUnbindBankCard:output_type -> new_chess.MallBookUnbindBankCardResp
+	41, // 60: new_chess.Trade.mallBookDeposit:output_type -> new_chess.MallBookDepositResp
+	45, // 61: new_chess.Trade.mallBookTransfer:output_type -> new_chess.MallBookTransferResp
+	48, // 62: new_chess.Trade.mallBookWithdraw:output_type -> new_chess.MallBookWithdrawResp
+	54, // 63: new_chess.Trade.mallBookCheckUserAccountInfo:output_type -> new_chess.MallBookCheckUserAccountInfoResp
+	57, // 64: new_chess.Trade.getNcountAccountInfo:output_type -> new_chess.GetNcountAccountInfoResp
+	59, // 65: new_chess.Trade.setPaymentSecret:output_type -> new_chess.SetPaymentSecretResp
+	62, // 66: new_chess.Trade.getOpenIDByCode:output_type -> new_chess.GetOpenIDByCodeResp
+	41, // [41:67] is the sub-list for method output_type
+	15, // [15:41] is the sub-list for method input_type
 	15, // [15:15] is the sub-list for extension type_name
 	15, // [15:15] is the sub-list for extension extendee
 	0,  // [0:15] is the sub-list for field type_name
@@ -5169,7 +5342,7 @@ func file_chess_trade_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_chess_trade_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   61,
+			NumMessages:   63,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

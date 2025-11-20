@@ -50,6 +50,18 @@ func (t *Trade) MallBookBindBankCard(request *trade.MallBookBindBankCardReq) (*t
 	return client.MallBookBindBankCard(ctx, request)
 }
 
+// MallBookBindBankCardConfirm 个人用户绑卡确认
+func (t *Trade) MallBookBindBankCardConfirm(request *trade.MallBookBindBankCardConfirmReq) (*trade.MallBookBindBankCardConfirmResp, error) {
+	conn, err := NewGrpcClient(t.Url)
+	if err != nil {
+		return nil, err
+	}
+
+	client := trade.NewTradeClient(conn)
+	ctx := GetMetadataCtx(t.RequestId, t.BizCode, t.Token)
+	return client.MallBookBindBankCardConfirm(ctx, request)
+}
+
 // MallBookUnbindBankCard 个人用户解绑银行卡
 func (t *Trade) MallBookUnbindBankCard(request *trade.MallBookUnbindBankCardReq) (*trade.MallBookUnbindBankCardResp, error) {
 	conn, err := NewGrpcClient(t.Url)

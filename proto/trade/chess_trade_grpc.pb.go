@@ -36,6 +36,7 @@ const (
 	Trade_CheckUserExtractRisk_FullMethodName         = "/new_chess.Trade/checkUserExtractRisk"
 	Trade_MallBookNewSelfAccount_FullMethodName       = "/new_chess.Trade/mallBookNewSelfAccount"
 	Trade_MallBookBindBankCard_FullMethodName         = "/new_chess.Trade/mallBookBindBankCard"
+	Trade_MallBookBindBankCardConfirm_FullMethodName  = "/new_chess.Trade/mallBookBindBankCardConfirm"
 	Trade_MallBookUnbindBankCard_FullMethodName       = "/new_chess.Trade/mallBookUnbindBankCard"
 	Trade_MallBookDeposit_FullMethodName              = "/new_chess.Trade/mallBookDeposit"
 	Trade_MallBookTransfer_FullMethodName             = "/new_chess.Trade/mallBookTransfer"
@@ -82,8 +83,10 @@ type TradeClient interface {
 	CheckUserExtractRisk(ctx context.Context, in *CheckUserExtractRiskReq, opts ...grpc.CallOption) (*CheckUserExtractRiskResp, error)
 	// mallbook个人开户
 	MallBookNewSelfAccount(ctx context.Context, in *MallBookNewSelfAccountReq, opts ...grpc.CallOption) (*MallBookNewSelfAccountResp, error)
-	// mallbook个人用户绑卡
+	// mallbook个人用户绑卡（预提交）
 	MallBookBindBankCard(ctx context.Context, in *MallBookBindBankCardReq, opts ...grpc.CallOption) (*MallBookBindBankCardResp, error)
+	// mallbook个人用户绑卡确认
+	MallBookBindBankCardConfirm(ctx context.Context, in *MallBookBindBankCardConfirmReq, opts ...grpc.CallOption) (*MallBookBindBankCardConfirmResp, error)
 	// mallbook个人用户解绑银行卡
 	MallBookUnbindBankCard(ctx context.Context, in *MallBookUnbindBankCardReq, opts ...grpc.CallOption) (*MallBookUnbindBankCardResp, error)
 	// mallbook充值
@@ -280,6 +283,16 @@ func (c *tradeClient) MallBookBindBankCard(ctx context.Context, in *MallBookBind
 	return out, nil
 }
 
+func (c *tradeClient) MallBookBindBankCardConfirm(ctx context.Context, in *MallBookBindBankCardConfirmReq, opts ...grpc.CallOption) (*MallBookBindBankCardConfirmResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MallBookBindBankCardConfirmResp)
+	err := c.cc.Invoke(ctx, Trade_MallBookBindBankCardConfirm_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *tradeClient) MallBookUnbindBankCard(ctx context.Context, in *MallBookUnbindBankCardReq, opts ...grpc.CallOption) (*MallBookUnbindBankCardResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MallBookUnbindBankCardResp)
@@ -396,8 +409,10 @@ type TradeServer interface {
 	CheckUserExtractRisk(context.Context, *CheckUserExtractRiskReq) (*CheckUserExtractRiskResp, error)
 	// mallbook个人开户
 	MallBookNewSelfAccount(context.Context, *MallBookNewSelfAccountReq) (*MallBookNewSelfAccountResp, error)
-	// mallbook个人用户绑卡
+	// mallbook个人用户绑卡（预提交）
 	MallBookBindBankCard(context.Context, *MallBookBindBankCardReq) (*MallBookBindBankCardResp, error)
+	// mallbook个人用户绑卡确认
+	MallBookBindBankCardConfirm(context.Context, *MallBookBindBankCardConfirmReq) (*MallBookBindBankCardConfirmResp, error)
 	// mallbook个人用户解绑银行卡
 	MallBookUnbindBankCard(context.Context, *MallBookUnbindBankCardReq) (*MallBookUnbindBankCardResp, error)
 	// mallbook充值
@@ -474,6 +489,9 @@ func (UnimplementedTradeServer) MallBookNewSelfAccount(context.Context, *MallBoo
 }
 func (UnimplementedTradeServer) MallBookBindBankCard(context.Context, *MallBookBindBankCardReq) (*MallBookBindBankCardResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MallBookBindBankCard not implemented")
+}
+func (UnimplementedTradeServer) MallBookBindBankCardConfirm(context.Context, *MallBookBindBankCardConfirmReq) (*MallBookBindBankCardConfirmResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MallBookBindBankCardConfirm not implemented")
 }
 func (UnimplementedTradeServer) MallBookUnbindBankCard(context.Context, *MallBookUnbindBankCardReq) (*MallBookUnbindBankCardResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MallBookUnbindBankCard not implemented")
@@ -826,6 +844,24 @@ func _Trade_MallBookBindBankCard_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Trade_MallBookBindBankCardConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MallBookBindBankCardConfirmReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TradeServer).MallBookBindBankCardConfirm(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Trade_MallBookBindBankCardConfirm_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TradeServer).MallBookBindBankCardConfirm(ctx, req.(*MallBookBindBankCardConfirmReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Trade_MallBookUnbindBankCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MallBookUnbindBankCardReq)
 	if err := dec(in); err != nil {
@@ -1044,6 +1080,10 @@ var Trade_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "mallBookBindBankCard",
 			Handler:    _Trade_MallBookBindBankCard_Handler,
+		},
+		{
+			MethodName: "mallBookBindBankCardConfirm",
+			Handler:    _Trade_MallBookBindBankCardConfirm_Handler,
 		},
 		{
 			MethodName: "mallBookUnbindBankCard",
